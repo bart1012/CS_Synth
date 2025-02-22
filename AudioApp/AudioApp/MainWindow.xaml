@@ -1,0 +1,17 @@
+﻿<Window x:Class="AudioApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AudioApp"
+        mc:Ignorable="d"
+        Title="Bart's Synth" Height="450" Width="800" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+    <StackPanel>
+        <ComboBox Name="WaveformType" SelectionChanged="ComboBox_OnSelectionChanged">
+            <ComboBoxItem Content="Sin" IsSelected="True"></ComboBoxItem>
+            <ComboBoxItem Content="Square"></ComboBoxItem>
+            <ComboBoxItem Content="Triangle"></ComboBoxItem>
+            <ComboBoxItem Content="SawTooth"></ComboBoxItem>
+        </ComboBox>
+    </StackPanel>
+</Window>
