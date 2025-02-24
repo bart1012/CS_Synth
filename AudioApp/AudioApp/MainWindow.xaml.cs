@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using AudioApp.Models;
+using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System.Windows;
 using System.Windows.Controls;
