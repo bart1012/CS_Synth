@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using AudioApp.Models;
+using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,45 +10,34 @@ namespace AudioApp
     public partial class MainWindow : Window
     {
         private WasapiOut wasapiOut = new WasapiOut();
-        private SignalGenerator sine = new SignalGenerator()
-        {
-            Gain = 0.2,
-            Frequency = 500,
-            Type = SignalGeneratorType.SawTooth
-        };
-
-        private FadeInOutSampleProvider fadeInOutSampleProvider;
+        private HashSet<Key> keysHeld = new();
         private bool isKeyPressed = false;
+        private MixingSampleProvider mixer;
+        private List<SignalGenerator> mixerSignals = new();
+        private SignalGeneratorType waveformType = SignalGeneratorType.Sin;
 
         public MainWindow()
         {
             InitializeComponent();
-            fadeInOutSampleProvider = new FadeInOutSampleProvider(sine, true);
-            wasapiOut.Init(fadeInOutSampleProvider);
+            mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
+            {
+                ReadFully = true
+            };
+            wasapiOut.Init(mixer);
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+            if (!keysHeld.Contains(e.Key))
             {
-                case (Key.A): sine.Frequency = 261.63; break;
-                case (Key.W): sine.Frequency = 277.18; break;
-                case (Key.S): sine.Frequency = 293.66; break;
-                case (Key.E): sine.Frequency = 311.13; break;
-                case (Key.D): sine.Frequency = 329.63; break;
-                case (Key.F): sine.Frequency = 349.23; break;
-                case (Key.T): sine.Frequency = 369.99; break;
-                case (Key.G): sine.Frequency = 392; break;
-                case (Key.Y): sine.Frequency = 415.30; break;
-                case (Key.H): sine.Frequency = 440; break;
-                case (Key.U): sine.Frequency = 466.16; break;
-                case (Key.J): sine.Frequency = 493.88; break;
-                case (Key.K): sine.Frequency = 523.25; break;
-                default: sine.Frequency = 440; break;
+                keysHeld.Add(e.Key);
+
+                mixer.AddMixerInput(new MappedSignalGenerator(e.Key, waveformType));
             }
+
+
             if (!isKeyPressed)
             {
-                fadeInOutSampleProvider.BeginFadeIn(100);
                 wasapiOut.Play();
                 isKeyPressed = true;
             }
@@ -55,19 +45,33 @@ namespace AudioApp
 
         private void Window_KeyUp(object sender, KeyEventArgs e)
         {
+            keysHeld.Remove(e.Key);
+
+            var inputToRemove = mixer.MixerInputs
+             .FirstOrDefault(i => i is MappedSignalGenerator mappedGen && mappedGen.Key == e.Key);
+
+            if (inputToRemove != null)
+            {
+                mixer.RemoveMixerInput(inputToRemove);
+            }
+
+            foreach (var item in mixer.MixerInputs)
+            {
+                var signal = item as SignalGenerator;
+                Console.WriteLine(signal.Frequency);
+            }
+
             if (wasapiOut.PlaybackState == PlaybackState.Playing)
             {
-                fadeInOutSampleProvider.BeginFadeOut(100);
+
+                wasapiOut.Stop();
             }
 
             isKeyPressed = false;
         }
 
 
-        private void wasapiOut_PlaybackStopped(object sender, StoppedEventArgs e)
-        {
-            wasapiOut.Stop();
-        }
+
 
 
 
@@ -75,17 +79,19 @@ namespace AudioApp
         {
             ComboBox cbox = sender as ComboBox;
             string selected = cbox.SelectedItem.ToString().Split(": ").Last();
+
             switch (selected)
             {
-
-                case "Sin": sine.Type = SignalGeneratorType.Sin; break;
-                case "Triangle": sine.Type = SignalGeneratorType.Triangle; break;
-                case "SawTooth": sine.Type = SignalGeneratorType.SawTooth; break;
-                case "Square":
-                    sine.Type = SignalGeneratorType.Square; break;
-                deafult: sine.Type = SignalGeneratorType.Sin; break;
+                case "Sin": waveformType = SignalGeneratorType.Sin; break;
+                case "Triangle": waveformType = SignalGeneratorType.Triangle; break;
+                case "SawTooth": waveformType = SignalGeneratorType.SawTooth; break;
+                case "Square": waveformType = SignalGeneratorType.Square; break;
             }
 
+
+
         }
+
+
     }
 }
