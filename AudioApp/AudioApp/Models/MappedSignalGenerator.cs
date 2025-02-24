@@ -1,13 +1,6 @@
-﻿#region Assembly NAudio.Core, Version=2.2.1.0, Culture=neutral, PublicKeyToken=e279aa5131008a41
-// C:\Users\biels\.nuget\packages\naudio.core\2.2.1\lib\netstandard2.0\NAudio.Core.dll
-// Decompiled with ICSharpCode.Decompiler 8.1.1.7464
-#endregion
+﻿
 
 using System.Windows.Input;
-
-
-
-
 
 namespace NAudio.Wave.SampleProviders;
 public class MappedSignalGenerator : ISampleProvider

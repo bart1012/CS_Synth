@@ -88,10 +88,10 @@ namespace AudioApp
 
         }
 
-        private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<float> e)
+        private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             var slider = sender as Slider;
-            //50 = 1; 0 =0.5z
+            _gain = (float)slider.Value;
         }
 
 

@@ -13,5 +13,7 @@
             <ComboBoxItem Content="Triangle"></ComboBoxItem>
             <ComboBoxItem Content="SawTooth"></ComboBoxItem>
         </ComboBox>
+        <Slider Name="VolumeSlider" Width="50" Height="150" Orientation="Vertical" Value="0.5" Minimum="0" Maximum="1" SmallChange="0.1" LargeChange="0.25" TickFrequency="10" TickPlacement="Both" Margin="100" ValueChanged="Slider_OnValueChanged" >
+        </Slider>
     </StackPanel>
 </Window>
