@@ -7,15 +7,14 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	
-	<ItemGroup>
-    <PackageReference Include="NAudio" Version="2.2.1" />
-  </ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="NAudio" Version="2.2.1" />
-	
 
   <ItemGroup>
     <PackageReference Include="NAudio" Version="2.2.1" />
+  </ItemGroup>
+	
+
+  <ItemGroup>
+    <Folder Include="DSP\" />
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
+
 namespace AudioApp
 {
     public partial class MainWindow : Window
@@ -15,6 +16,7 @@ namespace AudioApp
         private MixingSampleProvider mixer;
         private List<SignalGenerator> mixerSignals = new();
         private SignalGeneratorType waveformType = SignalGeneratorType.Sin;
+        private float _gain;
 
         public MainWindow()
         {
@@ -32,7 +34,7 @@ namespace AudioApp
             {
                 keysHeld.Add(e.Key);
 
-                mixer.AddMixerInput(new MappedSignalGenerator(e.Key, waveformType));
+                mixer.AddMixerInput(new MappedSignalGenerator(e.Key, waveformType, _gain));
             }
 
 
@@ -70,11 +72,6 @@ namespace AudioApp
             isKeyPressed = false;
         }
 
-
-
-
-
-
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox cbox = sender as ComboBox;
@@ -91,6 +88,18 @@ namespace AudioApp
 
 
         }
+
+        private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var slider = sender as Slider;
+            _gain = (float)slider.Value;
+            //50 = 1; 0 =0.5; -50 = 0
+        }
+
+
+
+
+
 
 
     }

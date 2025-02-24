@@ -1,13 +1,14 @@
-﻿using NAudio.Wave.SampleProviders;
+﻿using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using System.Windows.Input;
 
 namespace AudioApp.Models
 {
-    public class MappedSignalGenerator : SignalGenerator
+    public class MappedSignalGenerator : SignalGenerator, ISampleProvider
     {
         public Key Key { get; set; }
 
-        public MappedSignalGenerator(Key e, SignalGeneratorType type)
+        public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain)
         {
             Key = e;
             Frequency = e switch
@@ -28,8 +29,15 @@ namespace AudioApp.Models
                 _ => 261.63f // C4
             };
             Type = type;
-
+            Gain = gain;
         }
+
+        public new int Read(float[] buffer, int offset, int count)
+        {
+
+            return base.Read(buffer, offset, count);
+        }
+
 
 
     }
