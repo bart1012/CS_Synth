@@ -16,6 +16,7 @@ namespace AudioApp
         private MixingSampleProvider mixer;
         private List<SignalGenerator> mixerSignals = new();
         private SignalGeneratorType waveformType = SignalGeneratorType.Sin;
+        private AudioEngine audioEngine;
 
         private float _gain = 0.5f;
 
@@ -27,6 +28,7 @@ namespace AudioApp
                 ReadFully = true
             };
             wasapiOut.Init(mixer);
+            audioEngine = AudioEngine.GetInstance();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -35,15 +37,16 @@ namespace AudioApp
             {
                 keysHeld.Add(e.Key);
 
-                double tremoloDepth = TremoloDepthControl.Amount / 100;
-                double tremoloFrequency = TremoloFrequencyControl.Amount / 10;
-                mixer.AddMixerInput(new MappedSignalGenerator(e.Key, waveformType, _gain, tremoloDepth, tremoloFrequency));
+                float tremoloDepth = TremoloDepthControl.Amount / 100.00f;
+                float tremoloFrequency = TremoloFrequencyControl.Amount / 10.00f;
+                audioEngine.AddSignalToMix(e.Key, waveformType, _gain, tremoloDepth, tremoloFrequency);
+
             }
 
 
             if (!isKeyPressed)
             {
-                wasapiOut.Play();
+                audioEngine.Play();
                 isKeyPressed = true;
             }
         }
@@ -52,25 +55,10 @@ namespace AudioApp
         {
             keysHeld.Remove(e.Key);
 
-            var inputToRemove = mixer.MixerInputs
-             .FirstOrDefault(i => i is MappedSignalGenerator mappedGen && mappedGen.Key == e.Key);
+            audioEngine.RemoveSignalFromMix(e.Key);
 
-            if (inputToRemove != null)
-            {
-                mixer.RemoveMixerInput(inputToRemove);
-            }
 
-            foreach (var item in mixer.MixerInputs)
-            {
-                var signal = item as SignalGenerator;
-                Console.WriteLine(signal.Frequency);
-            }
-
-            if (wasapiOut.PlaybackState == PlaybackState.Playing)
-            {
-
-                wasapiOut.Stop();
-            }
+            audioEngine.Stop();
 
             isKeyPressed = false;
         }

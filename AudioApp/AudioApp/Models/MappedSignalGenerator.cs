@@ -17,7 +17,7 @@ namespace AudioApp.Models
 
 
 
-        public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain, double tremoloDepthValue, double tremoloFrequencyValue)
+        public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain)
 
         {
             Key = e;
@@ -40,8 +40,7 @@ namespace AudioApp.Models
             };
             Type = type;
             Gain = gain;
-            tremoloDepth = tremoloDepthValue;
-            tremoloFrequency = tremoloFrequencyValue;
+
 
         }
 
@@ -59,8 +58,7 @@ namespace AudioApp.Models
                         {
                             double angularFrequency = Math.PI * 2 * Frequency / 44100;
                             amplitude = Gain * Math.Sin(angularFrequency * nSample);
-                            double tremoloSignal = 1 + tremoloDepth * Math.Sin((Math.PI * 2 / 44100) * tremoloFrequency * nSample);
-                            amplitude *= tremoloSignal;
+                            amplitude *= CalculateTremoloSignal();
                             nSample++;
                             break;
                         }
@@ -156,7 +154,16 @@ namespace AudioApp.Models
             return 2.0 * random.NextDouble() - 1.0;
         }
 
-
+        public void AddTremolo(double depth, double frequency)
+        {
+            tremoloDepth = depth;
+            tremoloFrequency = frequency;
+        }
+        private double CalculateTremoloSignal()
+        {
+            double tremoloSignal = 1 + tremoloDepth * Math.Sin((Math.PI * 2 / 44100) * tremoloFrequency * nSample);
+            return tremoloSignal;
+        }
 
 
     }
