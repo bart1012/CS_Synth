@@ -11,10 +11,12 @@ namespace AudioApp.Models
         private readonly Random random = new Random();
         private readonly double[] pinkNoiseBuffer = new double[7];
         private double phi = 0.0;
+        private double tremoloDepth;
+        private double tremoloFrequency;
 
 
 
-        public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain)
+        public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain, double tremoloDepthValue, double tremoloFrequencyValue)
         {
             Key = e;
             Frequency = e switch
@@ -36,6 +38,8 @@ namespace AudioApp.Models
             };
             Type = type;
             Gain = gain;
+            tremoloDepth = tremoloDepthValue;
+            tremoloFrequency = tremoloFrequencyValue;
         }
 
         public new int Read(float[] buffer, int offset, int count)
@@ -44,53 +48,55 @@ namespace AudioApp.Models
             int num = offset;
             for (int i = 0; i < count / 2; i++)
             {
-                double num2;
+                double amplitude;
                 switch (Type)
                 {
                     case SignalGeneratorType.Sin:
                         {
-                            double num4 = Math.PI * 2.0 * Frequency / (double)44100;
-                            num2 = Gain * Math.Sin((double)nSample * num4);
+                            double angularFrequency = Math.PI * 2 * Frequency / 44100;
+                            amplitude = Gain * Math.Sin(angularFrequency * nSample);
+                            double tremoloSignal = 1 + tremoloDepth * Math.Sin((Math.PI * 2 / 44100) * tremoloFrequency * nSample);
+                            amplitude *= tremoloSignal;
                             nSample++;
                             break;
                         }
                     case SignalGeneratorType.Square:
                         {
-                            double num4 = 2.0 * Frequency / (double)44100;
-                            double num7 = (double)nSample * num4 % 2.0 - 1.0;
-                            num2 = ((num7 >= 0.0) ? Gain : (0.0 - Gain));
+                            double angularFrequency = 2.0 * Frequency / (double)44100;
+                            double num7 = (double)nSample * angularFrequency % 2.0 - 1.0;
+                            amplitude = ((num7 >= 0.0) ? Gain : (0.0 - Gain));
                             nSample++;
                             break;
                         }
                     case SignalGeneratorType.Triangle:
                         {
-                            double num4 = 2.0 * Frequency / (double)44100;
-                            double num7 = (double)nSample * num4 % 2.0;
-                            num2 = 2.0 * num7;
-                            if (num2 > 1.0)
+                            double angularFrequency = 2.0 * Frequency / (double)44100;
+                            double num7 = (double)nSample * angularFrequency % 2.0;
+                            amplitude = 2.0 * num7;
+                            if (amplitude > 1.0)
                             {
-                                num2 = 2.0 - num2;
+                                amplitude = 2.0 - amplitude;
                             }
 
-                            if (num2 < -1.0)
+                            if (amplitude < -1.0)
                             {
-                                num2 = -2.0 - num2;
+                                amplitude = -2.0 - amplitude;
                             }
 
-                            num2 *= Gain;
+                            amplitude *= Gain;
                             nSample++;
                             break;
                         }
                     case SignalGeneratorType.SawTooth:
                         {
-                            double num4 = 2.0 * Frequency / (double)44100;
-                            double num7 = (double)nSample * num4 % 2.0 - 1.0;
-                            num2 = Gain * num7;
+                            double angularFrequency = 2.0 * Frequency / (double)44100;
+                            double num7 = (double)nSample * angularFrequency % 2.0 - 1.0;
+                            amplitude = Gain * num7;
                             nSample++;
                             break;
                         }
                     case SignalGeneratorType.White:
-                        num2 = Gain * NextRandomTwo();
+                        amplitude = Gain * NextRandomTwo();
                         break;
                     case SignalGeneratorType.Pink:
                         {
@@ -103,15 +109,15 @@ namespace AudioApp.Models
                             pinkNoiseBuffer[5] = -0.7616 * pinkNoiseBuffer[5] - num5 * 0.016898;
                             double num6 = pinkNoiseBuffer[0] + pinkNoiseBuffer[1] + pinkNoiseBuffer[2] + pinkNoiseBuffer[3] + pinkNoiseBuffer[4] + pinkNoiseBuffer[5] + pinkNoiseBuffer[6] + num5 * 0.5362;
                             pinkNoiseBuffer[6] = num5 * 0.115926;
-                            num2 = Gain * (num6 / 5.0);
+                            amplitude = Gain * (num6 / 5.0);
                             break;
                         }
                     case SignalGeneratorType.Sweep:
                         {
                             double num3 = Math.Exp(FrequencyLog + (double)nSample * (FrequencyEndLog - FrequencyLog) / (SweepLengthSecs * (double)44100));
-                            double num4 = Math.PI * 2.0 * num3 / (double)44100;
-                            phi += num4;
-                            num2 = Gain * Math.Sin(phi);
+                            double angularFrequency = Math.PI * 2.0 * num3 / (double)44100;
+                            phi += angularFrequency;
+                            amplitude = Gain * Math.Sin(phi);
                             nSample++;
                             if ((double)nSample > SweepLengthSecs * (double)44100)
                             {
@@ -122,7 +128,7 @@ namespace AudioApp.Models
                             break;
                         }
                     default:
-                        num2 = 0.0;
+                        amplitude = 0.0;
                         break;
                 }
 
@@ -130,11 +136,11 @@ namespace AudioApp.Models
                 {
                     if (PhaseReverse[j])
                     {
-                        buffer[num++] = (float)(0.0 - num2);
+                        buffer[num++] = (float)(0.0 - amplitude);
                     }
                     else
                     {
-                        buffer[num++] = (float)num2;
+                        buffer[num++] = (float)amplitude;
                     }
                 }
             }

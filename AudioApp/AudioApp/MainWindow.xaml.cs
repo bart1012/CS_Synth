@@ -16,7 +16,8 @@ namespace AudioApp
         private MixingSampleProvider mixer;
         private List<SignalGenerator> mixerSignals = new();
         private SignalGeneratorType waveformType = SignalGeneratorType.Sin;
-        private float _gain;
+        private float _gain = 0.5f;
+
 
         public MainWindow()
         {
@@ -33,8 +34,9 @@ namespace AudioApp
             if (!keysHeld.Contains(e.Key))
             {
                 keysHeld.Add(e.Key);
-
-                mixer.AddMixerInput(new MappedSignalGenerator(e.Key, waveformType, _gain));
+                double tremoloDepth = TremoloDepthControl.Amount / 100;
+                double tremoloFrequency = TremoloFrequencyControl.Amount / 10;
+                mixer.AddMixerInput(new MappedSignalGenerator(e.Key, waveformType, _gain, tremoloDepth, tremoloFrequency));
             }
 
 
