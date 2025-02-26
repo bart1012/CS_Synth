@@ -8,14 +8,15 @@
         mc:Ignorable="d"
         Title="Bart's Synth" Height="450" Width="800" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <StackPanel>
-        <ComboBox Name="WaveformType" SelectionChanged="ComboBox_OnSelectionChanged">
+        <ComboBox Name="WaveformType" SelectionChanged="ComboBox_OnSelectionChanged" Width="75">
             <ComboBoxItem Content="Sin" IsSelected="True"></ComboBoxItem>
             <ComboBoxItem Content="Square"></ComboBoxItem>
             <ComboBoxItem Content="Triangle"></ComboBoxItem>
             <ComboBoxItem Content="SawTooth"></ComboBoxItem>
         </ComboBox>
-        <controls:KnobControl x:Name="TremoloDepthControl" Width="332"/>
-        <controls:KnobControl x:Name="TremoloFrequencyControl" Width="332"/>
-        <!--<Slider x:Name="VolumeSlider" Width="50" Height="150" Orientation="Vertical" Value="0.5" Minimum="0" Maximum="1" SmallChange="0.1" LargeChange="0.25" TickFrequency="10" TickPlacement="Both" ValueChanged="Slider_OnValueChanged" /> -->
+
+        <Slider Name="VolumeSlider" Width="50" Height="150" Orientation="Vertical" Value="0.5" Minimum="0" Maximum="1" SmallChange="0.1" LargeChange="0.25" TickFrequency="10" TickPlacement="Both" Margin="100" ValueChanged="Slider_OnValueChanged" >
+        </Slider> 
+
     </StackPanel>
 </Window>

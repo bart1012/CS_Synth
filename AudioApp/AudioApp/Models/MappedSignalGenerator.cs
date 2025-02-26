@@ -16,7 +16,9 @@ namespace AudioApp.Models
 
 
 
+
         public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain, double tremoloDepthValue, double tremoloFrequencyValue)
+
         {
             Key = e;
             Frequency = e switch
@@ -40,10 +42,12 @@ namespace AudioApp.Models
             Gain = gain;
             tremoloDepth = tremoloDepthValue;
             tremoloFrequency = tremoloFrequencyValue;
+
         }
 
         public new int Read(float[] buffer, int offset, int count)
         {
+
 
             int num = offset;
             for (int i = 0; i < count / 2; i++)
@@ -151,6 +155,7 @@ namespace AudioApp.Models
         {
             return 2.0 * random.NextDouble() - 1.0;
         }
+
 
 
 
