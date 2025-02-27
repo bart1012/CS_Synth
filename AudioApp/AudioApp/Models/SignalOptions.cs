@@ -1,4 +1,5 @@
-﻿using NAudio.Wave.SampleProviders;
+﻿using NAudio.Dsp;
+using NAudio.Wave.SampleProviders;
 using System.Windows.Input;
 
 namespace AudioApp.Models
@@ -11,5 +12,7 @@ namespace AudioApp.Models
         public float TremoloDepth { get; set; } = 0.5f;
         public float TremoloFrequency { get; set; } = 5.0f;
         public int Octave { get; set; } = 2;
+
+        public BiQuadFilter Filter;
     }
 }

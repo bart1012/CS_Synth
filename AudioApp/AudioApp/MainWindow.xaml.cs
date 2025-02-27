@@ -33,11 +33,13 @@ namespace AudioApp
                 {
                     Key = e.Key,
                     Type = waveformType,
-                    Gain = _gain,
+                    Gain = (float)VolumeSlider.Value,
                     TremoloDepth = tremoloDepth,
                     TremoloFrequency = tremoloFrequency,
-
+                    Octave = (int)OctaveSlider.Value,
+                    //Filter = BiQuadFilter.LowPassFilter(44100, 110, 1.0f)
                 };
+
 
                 audioEngine.AddSignalToMix(options);
 

@@ -37,6 +37,10 @@ namespace AudioApp.Models
             var signalBuilder = new SignalBuilder();
             signalBuilder.GenerateDefaultSignal(options.Key, options.Type, options.Gain, options.Octave);
             signalBuilder.AddTremolo(options.TremoloDepth, options.TremoloFrequency);
+            if (options.Filter != null)
+            {
+                signalBuilder.AddFilter(options.Filter);
+            }
             var generatedSignal = signalBuilder.GetSignal();
 
             _mixer.AddMixerInput(generatedSignal);

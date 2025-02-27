@@ -34,7 +34,8 @@
                 <DropShadowEffect Color="LightGray" BlurRadius="20"  />
             </Ellipse.Effect>
         </Ellipse>
-        <TextBlock x:Name="_innerCaption" MouseUp="_innerCaption_MouseUp" MouseLeftButtonDown="_innerCaption_MouseDown" MouseMove="_innerCaption_MouseMove" Width="130" Height="20" TextAlignment="Center" VerticalAlignment="Center">Tremolo</TextBlock>
+        <TextBlock x:Name="_innerCaption" MouseUp="_innerCaption_MouseUp" MouseLeftButtonDown="_innerCaption_MouseDown" MouseMove="_innerCaption_MouseMove" Width="130" Height="20" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Caption, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+></TextBlock>
        
 
 

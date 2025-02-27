@@ -12,6 +12,14 @@ namespace AudioApp.Controls
         private int _amount = 0;
         public int Amount => _amount;
         private bool _isDragged = false;
+        public static readonly DependencyProperty CaptionProperty =
+           DependencyProperty.Register(nameof(Caption), typeof(string), typeof(KnobControl), new PropertyMetadata("Tremolo"));
+
+        public string Caption
+        {
+            get => (string)GetValue(CaptionProperty);
+            set => SetValue(CaptionProperty, value);
+        }
         public KnobControl()
         {
             InitializeComponent();
@@ -37,7 +45,7 @@ namespace AudioApp.Controls
         {
             _isDragged = false;
             var textBlock = sender as TextBlock;
-            textBlock.Text = "Tremolo";
+            textBlock.Text = Caption;
         }
     }
 }

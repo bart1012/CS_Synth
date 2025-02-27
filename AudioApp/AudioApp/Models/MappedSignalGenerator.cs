@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using NAudio.Dsp;
+using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System.Windows.Input;
 
@@ -13,6 +14,8 @@ namespace AudioApp.Models
         private double phi = 0.0;
         private double tremoloDepth;
         private double tremoloFrequency;
+        private bool filterApplied = false;
+        private BiQuadFilter filter;
 
 
 
@@ -40,17 +43,17 @@ namespace AudioApp.Models
             };
             Frequency = baseFrequency * MathF.Pow(2, octave - 1);
             Type = type;
-            Gain = 1.0;
+            Gain = gain;
 
 
         }
 
-        public new int Read(float[] buffer, int offset, int count)
+        public new int Read(float[] buffer, int offset, int samplesRead)
         {
 
 
             int num = offset;
-            for (int i = 0; i < count / 2; i++)
+            for (int i = 0; i < samplesRead / 2; i++)
             {
                 double amplitude;
                 switch (Type)
@@ -135,19 +138,20 @@ namespace AudioApp.Models
                         break;
                 }
 
+                if (filterApplied)
+                {
+                    amplitude = filter.Transform((float)amplitude);
+                }
+
                 for (int j = 0; j < 2; j++)
                 {
-                    if (PhaseReverse[j])
-                    {
-                        buffer[num++] = (float)(0.0 - amplitude);
-                    }
-                    else
-                    {
-                        buffer[num++] = (float)amplitude;
-                    }
+                    buffer[num++] = PhaseReverse[j] ? (float)-amplitude : (float)amplitude;
                 }
             }
-            return count;
+
+
+
+            return samplesRead;
         }
 
         private double NextRandomTwo()
@@ -159,6 +163,12 @@ namespace AudioApp.Models
         {
             tremoloDepth = depth;
             tremoloFrequency = frequency;
+        }
+
+        public void AddFilter(BiQuadFilter filter)
+        {
+            filterApplied = true;
+            this.filter = filter;
         }
         private double CalculateTremoloSignal()
         {
