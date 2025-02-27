@@ -30,11 +30,13 @@ namespace AudioApp.Models
             return _instance;
         }
 
-        public void AddSignalToMix(Key key, SignalGeneratorType type = SignalGeneratorType.Sin, float gain = 0.5f, float tremoloDepth = 0.5f, float tremoloFrequency = 5.0f)
+        //Key key, SignalGeneratorType type = SignalGeneratorType.Sin, float gain = 0.5f, float tremoloDepth = 0.5f, float tremoloFrequency = 5.0f)
+
+        public void AddSignalToMix(SignalOptions options)
         {
             var signalBuilder = new SignalBuilder();
-            signalBuilder.GenerateDefaultSignal(key, type, gain);
-            signalBuilder.AddTremolo(tremoloDepth, tremoloFrequency);
+            signalBuilder.GenerateDefaultSignal(options.Key, options.Type, options.Gain, options.Octave);
+            signalBuilder.AddTremolo(options.TremoloDepth, options.TremoloFrequency);
             var generatedSignal = signalBuilder.GetSignal();
 
             _mixer.AddMixerInput(generatedSignal);

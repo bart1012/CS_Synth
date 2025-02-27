@@ -1,2 +1,5 @@
 Application has to consume two native APIs: Multimedia Device API and WASAPI 
 Find interface reference GUIDs in microsoft interface headers (.h files)
+
+TO DO:
+-add octave picker 

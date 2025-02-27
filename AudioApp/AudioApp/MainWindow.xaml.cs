@@ -1,5 +1,4 @@
 ﻿using AudioApp.Models;
-using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,24 +9,15 @@ namespace AudioApp
 {
     public partial class MainWindow : Window
     {
-        private WasapiOut wasapiOut = new WasapiOut();
         private HashSet<Key> keysHeld = new();
         private bool isKeyPressed = false;
-        private MixingSampleProvider mixer;
-        private List<SignalGenerator> mixerSignals = new();
         private SignalGeneratorType waveformType = SignalGeneratorType.Sin;
         private AudioEngine audioEngine;
-
         private float _gain = 0.5f;
 
         public MainWindow()
         {
             InitializeComponent();
-            mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
-            {
-                ReadFully = true
-            };
-            wasapiOut.Init(mixer);
             audioEngine = AudioEngine.GetInstance();
         }
 
@@ -39,7 +29,17 @@ namespace AudioApp
 
                 float tremoloDepth = TremoloDepthControl.Amount / 100.00f;
                 float tremoloFrequency = TremoloFrequencyControl.Amount / 10.00f;
-                audioEngine.AddSignalToMix(e.Key, waveformType, _gain, tremoloDepth, tremoloFrequency);
+                var options = new SignalOptions()
+                {
+                    Key = e.Key,
+                    Type = waveformType,
+                    Gain = _gain,
+                    TremoloDepth = tremoloDepth,
+                    TremoloFrequency = tremoloFrequency,
+
+                };
+
+                audioEngine.AddSignalToMix(options);
 
             }
 

@@ -8,7 +8,7 @@ namespace AudioApp.Models
         void AddTremolo(float depth, float frequency);
         MappedSignalGenerator GetSignal();
 
-        void GenerateDefaultSignal(Key key, SignalGeneratorType type, float gain);
+        void GenerateDefaultSignal(Key key, SignalGeneratorType type, float gain, int octave);
     }
 
     class SignalBuilder : IBuilder
@@ -20,9 +20,9 @@ namespace AudioApp.Models
             else _signal.AddTremolo(depth, frequency);
         }
 
-        public void GenerateDefaultSignal(Key key, SignalGeneratorType type, float gain)
+        public void GenerateDefaultSignal(Key key, SignalGeneratorType type, float gain, int octave)
         {
-            _signal = new MappedSignalGenerator(key, type, gain);
+            _signal = new MappedSignalGenerator(key, type, gain, octave);
         }
 
         public MappedSignalGenerator GetSignal()
