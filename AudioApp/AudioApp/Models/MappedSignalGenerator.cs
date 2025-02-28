@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using NAudio.Dsp;
+using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System.Windows.Input;
 
@@ -13,54 +14,56 @@ namespace AudioApp.Models
         private double phi = 0.0;
         private double tremoloDepth;
         private double tremoloFrequency;
+        private bool filterApplied = false;
+        private BiQuadFilter filter;
 
 
 
 
-        public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain, double tremoloDepthValue, double tremoloFrequencyValue)
-
+        public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain, int octave)
         {
+            if (octave < 1 || octave > 3) throw new ArgumentException("Octave must be between 1 and 3");
             Key = e;
-            Frequency = e switch
+            float baseFrequency = e switch
             {
-                Key.A => 261.63f,  // Middle C (C4)
-                Key.W => 277.18f,  // C#4
-                Key.S => 293.66f,  // D4
-                Key.E => 311.13f,  // D#4
-                Key.D => 329.63f,  // E4
-                Key.F => 349.23f,  // F4
-                Key.T => 369.99f,  // F#4
-                Key.G => 392.00f,  // G4
-                Key.Y => 415.30f,  // G#4
-                Key.H => 440.00f,  // A4 (A4 is often used as the tuning standard)
-                Key.U => 466.16f,  // A#4
-                Key.J => 493.88f,  // B4
-                Key.K => 523.25f,  // C5
-                _ => 261.63f // C4
+                Key.A => 130.81f,  // C3
+                Key.W => 138.59f,  // C#3
+                Key.S => 146.83f,  // D3
+                Key.E => 155.56f,  // D#3
+                Key.D => 164.81f,  // E3
+                Key.F => 174.61f,  // F3
+                Key.T => 185.00f,  // F#3
+                Key.G => 196.00f,  // G3
+                Key.Y => 207.65f,  // G#3
+                Key.H => 220.00f,  // A3
+                Key.U => 233.08f,  // A#3
+                Key.J => 246.94f,  // B3
+                Key.K => 261.63f,  // C4
+                _ => 130.81f       // Default to C3
             };
+            Frequency = baseFrequency * MathF.Pow(2, octave - 1);
             Type = type;
             Gain = gain;
-            tremoloDepth = tremoloDepthValue;
-            tremoloFrequency = tremoloFrequencyValue;
+
 
         }
 
-        public new int Read(float[] buffer, int offset, int count)
+        public new int Read(float[] buffer, int offset, int samplesRead)
         {
 
 
             int num = offset;
-            for (int i = 0; i < count / 2; i++)
+            for (int i = 0; i < samplesRead / 2; i++)
             {
                 double amplitude;
                 switch (Type)
                 {
                     case SignalGeneratorType.Sin:
                         {
-                            double angularFrequency = Math.PI * 2 * Frequency / 44100;
+                            double driftFrequency = AddDrift(Frequency, 0.5, 0.25, 0, nSample);
+                            double angularFrequency = Math.PI * 2 * driftFrequency / 44100;
                             amplitude = Gain * Math.Sin(angularFrequency * nSample);
-                            double tremoloSignal = 1 + tremoloDepth * Math.Sin((Math.PI * 2 / 44100) * tremoloFrequency * nSample);
-                            amplitude *= tremoloSignal;
+                            amplitude *= CalculateTremoloSignal();
                             nSample++;
                             break;
                         }
@@ -136,19 +139,22 @@ namespace AudioApp.Models
                         break;
                 }
 
+                if (filterApplied)
+                {
+                    amplitude = filter.Transform((float)amplitude);
+                }
+
+
+
                 for (int j = 0; j < 2; j++)
                 {
-                    if (PhaseReverse[j])
-                    {
-                        buffer[num++] = (float)(0.0 - amplitude);
-                    }
-                    else
-                    {
-                        buffer[num++] = (float)amplitude;
-                    }
+                    buffer[num++] = PhaseReverse[j] ? (float)-amplitude : (float)amplitude;
                 }
             }
-            return count;
+
+
+
+            return samplesRead;
         }
 
         private double NextRandomTwo()
@@ -156,8 +162,28 @@ namespace AudioApp.Models
             return 2.0 * random.NextDouble() - 1.0;
         }
 
+        public void AddTremolo(double depth, double frequency)
+        {
+            tremoloDepth = depth;
+            tremoloFrequency = frequency;
+        }
 
+        public void AddFilter(BiQuadFilter filter)
+        {
+            filterApplied = true;
+            this.filter = filter;
+        }
+        private double CalculateTremoloSignal()
+        {
+            double tremoloSignal = 1 + tremoloDepth * Math.Sin((Math.PI * 2 / 44100) * tremoloFrequency * nSample);
+            return tremoloSignal;
+        }
 
+        private double AddDrift(double baseFrequency, double driftAmount, double driftSpeed, double phase, int currentSample)
+        {
+            double lfoValue = driftAmount * Math.Sin(2 * Math.PI * driftSpeed * currentSample / 44100.0 + phase);
+            return baseFrequency + lfoValue;
+        }
 
     }
 }

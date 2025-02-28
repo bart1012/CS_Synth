@@ -1,2 +1,17 @@
 Application has to consume two native APIs: Multimedia Device API and WASAPI 
 Find interface reference GUIDs in microsoft interface headers (.h files)
+
+TO DO:
+-add octave picker 
+--add portamento / glide: 
+--add voice options: mono, poly, arrpegiator, chord 
+
+---docs:
+
+The final type is the frequency sweep (or 'chirp'). This is a sine wave that starts at Frequency and smoothly ramps up to FrequencyEnd over the period defined in SweepLengthSecs. It then returns to the start frequency and repeats indefinitely
+
+Gain = 0.2, 
+Frequency = 500, // start frequency of the sweep
+FrequencyEnd = 2000, 
+Type = SignalGeneratorType.Sweep, 
+SweepLengthSecs = 2
