@@ -60,7 +60,8 @@ namespace AudioApp.Models
                 {
                     case SignalGeneratorType.Sin:
                         {
-                            double angularFrequency = Math.PI * 2 * Frequency / 44100;
+                            double driftFrequency = AddDrift(Frequency, 0.5, 0.25, 0, nSample);
+                            double angularFrequency = Math.PI * 2 * driftFrequency / 44100;
                             amplitude = Gain * Math.Sin(angularFrequency * nSample);
                             amplitude *= CalculateTremoloSignal();
                             nSample++;
@@ -143,6 +144,8 @@ namespace AudioApp.Models
                     amplitude = filter.Transform((float)amplitude);
                 }
 
+
+
                 for (int j = 0; j < 2; j++)
                 {
                     buffer[num++] = PhaseReverse[j] ? (float)-amplitude : (float)amplitude;
@@ -176,6 +179,11 @@ namespace AudioApp.Models
             return tremoloSignal;
         }
 
+        private double AddDrift(double baseFrequency, double driftAmount, double driftSpeed, double phase, int currentSample)
+        {
+            double lfoValue = driftAmount * Math.Sin(2 * Math.PI * driftSpeed * currentSample / 44100.0 + phase);
+            return baseFrequency + lfoValue;
+        }
 
     }
 }
