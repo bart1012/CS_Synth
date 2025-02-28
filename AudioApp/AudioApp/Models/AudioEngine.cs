@@ -30,31 +30,41 @@ namespace AudioApp.Models
             return _instance;
         }
 
-        //Key key, SignalGeneratorType type = SignalGeneratorType.Sin, float gain = 0.5f, float tremoloDepth = 0.5f, float tremoloFrequency = 5.0f)
 
         public void AddSignalToMix(SignalOptions options)
         {
             var signalBuilder = new SignalBuilder();
-            signalBuilder.GenerateDefaultSignal(options.Key, options.Type, options.Gain, options.Octave);
+            signalBuilder.GenerateDefaultSignal(options.Key, options.OscillatorOne_Type, options.OscillatorOne_Gain, options.OscillatorOne_Octave);
             signalBuilder.AddTremolo(options.TremoloDepth, options.TremoloFrequency);
             if (options.Filter != null)
             {
                 signalBuilder.AddFilter(options.Filter);
             }
-            var generatedSignal = signalBuilder.GetSignal();
+            var signalOne = signalBuilder.GetSignal();
 
-            _mixer.AddMixerInput(generatedSignal);
+            var signalBuilder2 = new SignalBuilder();
+            signalBuilder2.GenerateDefaultSignal(options.Key, options.OscillatorTwo_Type, options.OscillatorTwo_Gain, options.OscillatorTwo_Octave);
+            signalBuilder2.AddTremolo(options.TremoloDepth, options.TremoloFrequency);
+            if (options.Filter != null)
+            {
+                signalBuilder2.AddFilter(options.Filter);
+            }
+            var signalTwo = signalBuilder2.GetSignal();
+
+            _mixer.AddMixerInput(signalOne);
+            _mixer.AddMixerInput(signalTwo);
         }
 
         public void RemoveSignalFromMix(Key key)
         {
-            var inputToRemove = _mixer.MixerInputs
-             .FirstOrDefault(i => i is MappedSignalGenerator mappedGen && mappedGen.Key == key);
-
-            if (inputToRemove != null)
+            foreach (var signal in _mixer.MixerInputs.ToList())
             {
-                _mixer.RemoveMixerInput(inputToRemove);
+                if (signal is MappedSignalGenerator signalOsc && signalOsc.Key == key)
+                {
+                    _mixer.RemoveMixerInput(signal);
+                }
             }
+
         }
 
         public void Play()

@@ -11,14 +11,25 @@ namespace AudioApp
     {
         private HashSet<Key> keysHeld = new();
         private bool isKeyPressed = false;
-        private SignalGeneratorType waveformType = SignalGeneratorType.Sin;
         private AudioEngine audioEngine;
-        private float _gain = 0.5f;
+        private SignalOptions waveOptions;
+        private SignalGeneratorType oscillatorOneType;
+        private SignalGeneratorType oscillatorTwoType;
+        private float oscillatorOneGain;
+        private float oscillatorTwoGain;
+        private int oscillatorOneOctave;
+        private int oscillatorTwoOctave;
 
         public MainWindow()
         {
             InitializeComponent();
             audioEngine = AudioEngine.GetInstance();
+            oscillatorOneType = SignalGeneratorType.Sin;
+            oscillatorTwoType = SignalGeneratorType.SawTooth;
+            oscillatorOneGain = 0.5f;
+            oscillatorTwoGain = 0.5f;
+            oscillatorOneOctave = 2;
+            oscillatorTwoOctave = 2;
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -32,11 +43,14 @@ namespace AudioApp
                 var options = new SignalOptions()
                 {
                     Key = e.Key,
-                    Type = waveformType,
-                    Gain = (float)VolumeSlider.Value,
+                    OscillatorOne_Type = oscillatorOneType,
+                    OscillatorOne_Gain = oscillatorOneGain,
+                    OscillatorTwo_Type = oscillatorTwoType,
+                    OscillatorTwo_Gain = oscillatorTwoGain,
                     TremoloDepth = tremoloDepth,
                     TremoloFrequency = tremoloFrequency,
-                    Octave = (int)OctaveSlider.Value,
+                    OscillatorOne_Octave = oscillatorOneOctave,
+                    OscillatorTwo_Octave = oscillatorTwoOctave
                     //Filter = BiQuadFilter.LowPassFilter(44100, 110, 1.0f)
                 };
 
@@ -67,32 +81,50 @@ namespace AudioApp
 
         private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            ComboBox cbox = sender as ComboBox;
-            string selected = cbox.SelectedItem.ToString().Split(": ").Last();
-
-            switch (selected)
+            if (sender is ComboBox cbox && cbox.SelectedItem != null)
             {
-                case "Sin": waveformType = SignalGeneratorType.Sin; break;
-                case "Triangle": waveformType = SignalGeneratorType.Triangle; break;
-                case "SawTooth": waveformType = SignalGeneratorType.SawTooth; break;
-                case "Square": waveformType = SignalGeneratorType.Square; break;
+                string selected = cbox.SelectedItem.ToString().Split(": ").Last();
+
+                var waveformMap = new Dictionary<string, SignalGeneratorType>
+        {
+            { "Sin", SignalGeneratorType.Sin },
+            { "Triangle", SignalGeneratorType.Triangle },
+            { "SawTooth", SignalGeneratorType.SawTooth },
+            { "Square", SignalGeneratorType.Square }
+        };
+
+                if (waveformMap.TryGetValue(selected, out SignalGeneratorType waveformType))
+                {
+                    if (cbox.Name == "WaveformTypeOsc1")
+                        oscillatorOneType = waveformType;
+                    else if (cbox.Name == "WaveformTypeOsc2")
+                        oscillatorTwoType = waveformType;
+                }
             }
 
-
-
         }
 
-        private void Slider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void VolumeSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+
             var slider = sender as Slider;
-            _gain = (float)slider.Value;
+            float value = (float)slider.Value;
+            if (slider.Name == "VolumeSliderOsc1") oscillatorOneGain = value;
+            else oscillatorTwoGain = value;
         }
 
+        private void OctaveSlider_OnValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
 
+            var slider = sender as Slider;
+            int value = (int)slider.Value;
+            if (slider.Name == "OctaveSliderOsc1") oscillatorOneOctave = value;
+            else oscillatorTwoOctave = value;
+        }
 
+        private void TremoloFrequencyControl_Loaded(object sender, RoutedEventArgs e)
+        {
 
-
-
-
+        }
     }
 }

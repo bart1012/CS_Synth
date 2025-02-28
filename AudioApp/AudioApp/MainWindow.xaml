@@ -9,25 +9,46 @@
         Title="Bart's Synth" Height="450" Width="800" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="1*" />
             <RowDefinition Height="3*" />
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
-        <ComboBox Grid.Column="0" Name="WaveformType" SelectionChanged="ComboBox_OnSelectionChanged" Width="75" Height="25">
+        <ComboBox Grid.Column="0" Name="WaveformTypeOsc1" SelectionChanged="ComboBox_OnSelectionChanged" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,15,0">
             <ComboBoxItem Content="Sin" IsSelected="True"></ComboBoxItem>
             <ComboBoxItem Content="Square"></ComboBoxItem>
             <ComboBoxItem Content="Triangle"></ComboBoxItem>
             <ComboBoxItem Content="SawTooth"></ComboBoxItem>
         </ComboBox>
-        <controls:KnobControl Caption="Tremolo Depth" Grid.Row="1" x:Name="TremoloDepthControl" Width="332"/>
-        <controls:KnobControl Caption="Tremolo Frequency" Grid.Row="2" x:Name="TremoloFrequencyControl" Width="332"/>
-        <Slider x:Name="VolumeSlider" Grid.Column="1" Width="150" Height="25" Orientation="Horizontal" Value="0.5" Minimum="0" Maximum="1" SmallChange="0.1" LargeChange="0.25" TickFrequency="10" TickPlacement="Both" />
-        <Slider x:Name="OctaveSlider" Grid.Column="2" Width="150" Height="25" Orientation="Horizontal" Value="2" Minimum="1" Maximum="3" SmallChange="1" LargeChange="1" TickFrequency="1" TickPlacement="Both" />
+        <TextBlock Grid.Column="0" VerticalAlignment="Center" Width="150" Margin="0,0,30,0">Oscillator 1 Wave:</TextBlock>
+        <ComboBox Grid.Column="1" Name="WaveformTypeOsc2" SelectionChanged="ComboBox_OnSelectionChanged" Width="75" Height="25" HorizontalAlignment="Right" Margin="0,0,15,0">
+            <ComboBoxItem Content="Sin"></ComboBoxItem>
+            <ComboBoxItem Content="Square"></ComboBoxItem>
+            <ComboBoxItem Content="Triangle"></ComboBoxItem>
+            <ComboBoxItem Content="SawTooth" IsSelected="True"></ComboBoxItem>
+        </ComboBox>
+        <TextBlock Grid.Column="1" VerticalAlignment="Center" Width="150" Margin="0,0,30,0">Oscillator 2 Wave:</TextBlock>
+        <controls:KnobControl Caption="Tremolo Depth" Grid.Row="4" Grid.Column="0" x:Name="TremoloDepthControl" Width="200"/>
+        <controls:KnobControl Caption="Tremolo Frequency" Grid.Row="4" Grid.Column="1" x:Name="TremoloFrequencyControl" Width="200" Loaded="TremoloFrequencyControl_Loaded"/>
+        
+        <TextBlock Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Margin="0, 5,0,0">Oscillator 1 Gain:</TextBlock>
+        <Slider x:Name="VolumeSliderOsc1" Grid.Column="0" Grid.Row="1" Width="150" Margin="0,15,0,0" Height="25" Orientation="Horizontal" Value="0.5" Minimum="0" Maximum="1" SmallChange="0.1" LargeChange="0.25" TickFrequency="10" TickPlacement="Both" ValueChanged="VolumeSlider_OnValueChanged"/>
+        
+        <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Margin="0, 5,0,0">Oscillator 2 Gain:</TextBlock>
+        <Slider x:Name="VolumeSliderOsc2" Grid.Column="1" Grid.Row="1" Width="150" Margin="0,15,0,0" Height="25" Orientation="Horizontal" Value="0.5" Minimum="0" Maximum="1" SmallChange="0.1" LargeChange="0.25" TickFrequency="10" TickPlacement="Both" ValueChanged="VolumeSlider_OnValueChanged"/>
+
+        <TextBlock Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Margin="0, 5,0,0">Oscillator 1 Octave:</TextBlock>
+        <Slider x:Name="OctaveSliderOsc1" Grid.Column="0" Grid.Row="2" Margin="0,15,0,0" Width="150" Height="25" Orientation="Horizontal" Value="2" Minimum="1" Maximum="3" SmallChange="1" LargeChange="1" TickFrequency="1" TickPlacement="Both" ValueChanged="OctaveSlider_OnValueChanged"/>
+
+        <TextBlock Grid.Column="1" Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" TextAlignment="Center" Margin="0, 5,0,0">Oscillator 2 Octave:</TextBlock>
+        <Slider x:Name="OctaveSliderOsc2" Grid.Column="1" Grid.Row="2" Margin="0,15,0,0" Width="150" Height="25" Orientation="Horizontal" Value="2" Minimum="1" Maximum="3" SmallChange="1" LargeChange="1" TickFrequency="1" TickPlacement="Both" ValueChanged="OctaveSlider_OnValueChanged"/>
 
     </Grid>
 </Window>
