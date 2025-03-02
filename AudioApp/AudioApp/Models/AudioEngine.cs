@@ -51,25 +51,29 @@ namespace AudioApp.Models
             }
             var signalTwo = signalBuilder2.GetSignal();
 
-            _mixer.AddMixerInput(signalOne);
-            _mixer.AddMixerInput(signalTwo);
+            _mixer.AddMixerInput(new ADSRWrapper(signalOne));
+            //_mixer.AddMixerInput(signalTwo);
         }
 
         public void RemoveSignalFromMix(Key key)
         {
-            foreach (var signal in _mixer.MixerInputs.ToList())
+            foreach (ADSRWrapper signal in _mixer.MixerInputs.ToList())
             {
-                if (signal is MappedSignalGenerator signalOsc && signalOsc.Key == key)
+                if (signal.Key == key)
                 {
-                    _mixer.RemoveMixerInput(signal);
+                    signal.Stop();
+                    //_mixer.RemoveMixerInput(signal);
                 }
             }
 
         }
 
+
+
         public void Play()
         {
             _wasapiOut.Play();
+
         }
 
         public void Stop()
@@ -80,5 +84,7 @@ namespace AudioApp.Models
                 _wasapiOut.Stop();
             }
         }
+
+
     }
 }

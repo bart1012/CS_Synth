@@ -5,6 +5,8 @@ TO DO:
 -add octave picker 
 --add portamento / glide: 
 --add voice options: mono, poly, arrpegiator, chord 
+-- allow second oscillator to be turned on / off
+- seperate concerns - Keep MappedSignalGenerator focused only on generating raw waveforms - move filters and effects elsewhere 
 
 ---docs:
 

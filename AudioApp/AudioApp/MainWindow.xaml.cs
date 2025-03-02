@@ -73,8 +73,7 @@ namespace AudioApp
 
             audioEngine.RemoveSignalFromMix(e.Key);
 
-
-            audioEngine.Stop();
+            //audioEngine.Stop();
 
             isKeyPressed = false;
         }
