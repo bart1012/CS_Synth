@@ -9,14 +9,38 @@ namespace AudioApp.Models
         private static AudioEngine? _instance;
         private WasapiOut _wasapiOut;
         private MixingSampleProvider _mixer;
-        private List<SignalGenerator> _mixerSignals;
+        private Dictionary<Key, double> _frequencyMappings;
+        private List<OscillatorSettings> _oscillators = new();
+        private Dictionary<Key, ADSREnvelopeProvider> _activeNotes = new();
+
         private AudioEngine()
         {
             _wasapiOut = new();
-            _mixerSignals = new();
             _mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
             {
                 ReadFully = true
+            };
+            _oscillators.Add(new OscillatorSettings
+            {
+                Type = SignalGeneratorType.Sin,
+                Gain = 0.5,
+                Octave = 2
+            });
+            _frequencyMappings = new Dictionary<Key, double>
+            {
+                { Key.A,  130.81 },  // C3
+                { Key.W,  138.59 },  // C#3
+                { Key.S,  146.83 },  // D3
+                { Key.E,  155.56 },  // D#3
+                { Key.D,  164.81 },  // E3
+                { Key.F,  174.61 },  // F3
+                { Key.T,  185.00 },  // F#3
+                { Key.G,  196.00 },  // G3
+                { Key.Y,  207.65 },  // G#3
+                { Key.H,  220.00 },  // A3
+                { Key.U,  233.08 },  // A#3
+                { Key.J,  246.94 },  // B3
+                { Key.K,  261.63 }   // C4
             };
             _wasapiOut.Init(_mixer);
         }
@@ -29,49 +53,63 @@ namespace AudioApp.Models
             }
             return _instance;
         }
-
-
-        public void AddSignalToMix(SignalOptions options)
+        private SignalGenerator GenerateBaseSignal(Key key, OscillatorSettings options)
         {
-            var signalBuilder = new SignalBuilder();
-            signalBuilder.GenerateDefaultSignal(options.Key, options.OscillatorOne_Type, options.OscillatorOne_Gain, options.OscillatorOne_Octave);
-            signalBuilder.AddTremolo(options.TremoloDepth, options.TremoloFrequency);
-            if (options.Filter != null)
+            return new SignalGenerator()
             {
-                signalBuilder.AddFilter(options.Filter);
-            }
-            var signalOne = signalBuilder.GetSignal();
-
-            var signalBuilder2 = new SignalBuilder();
-            signalBuilder2.GenerateDefaultSignal(options.Key, options.OscillatorTwo_Type, options.OscillatorTwo_Gain, options.OscillatorTwo_Octave);
-            signalBuilder2.AddTremolo(options.TremoloDepth, options.TremoloFrequency);
-            if (options.Filter != null)
-            {
-                signalBuilder2.AddFilter(options.Filter);
-            }
-            var signalTwo = signalBuilder2.GetSignal();
-
-            _mixer.AddMixerInput(new ADSRWrapper(signalOne));
-            //_mixer.AddMixerInput(signalTwo);
-        }
-
-        public void RemoveSignalFromMix(Key key)
-        {
-            foreach (ADSRWrapper signal in _mixer.MixerInputs.ToList())
-            {
-                if (signal.Key == key)
-                {
-                    signal.Stop();
-                    //_mixer.RemoveMixerInput(signal);
-                }
-            }
+                Frequency = _frequencyMappings[key],
+                Type = options.Type,
+                Gain = options.Gain
+            };
 
         }
+        private ISampleProvider ApplyADSR(ISampleProvider source)
+        {
+            return new ADSREnvelopeProvider(source.ToMono())
+            {
+                AttackSeconds = 0.05f,
+                ReleaseSeconds = 2.0f
+            };
+        }
 
+        public void NoteDown(Key key)
+        {
 
+            if (!_frequencyMappings.ContainsKey(key)) return;
+            SignalGenerator baseSignal = GenerateBaseSignal(key, _oscillators[0]);
+            ADSREnvelopeProvider signal = (ADSREnvelopeProvider)ApplyADSR(baseSignal);
+            _activeNotes[key] = signal;
+            _mixer.AddMixerInput(signal.ToStereo());
+            signal.Start();
+        }
+
+        public void NoteUp(Key key)
+        {
+            if (!_frequencyMappings.ContainsKey(key)) return;
+            _activeNotes[key].Stop();
+        }
+
+        public void SetOscillatorType(int targetOscillator, SignalGeneratorType type)
+        {
+            if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
+            _oscillators[targetOscillator].Type = type;
+        }
+
+        public void SetOscillatorGain(int targetOscillator, double gain)
+        {
+            if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
+            _oscillators[targetOscillator].Gain = gain;
+        }
+
+        public void SetOscillatorOctave(int targetOscillator, int octave)
+        {
+            if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
+            _oscillators[targetOscillator].Octave = octave;
+        }
 
         public void Play()
         {
+
             _wasapiOut.Play();
 
         }

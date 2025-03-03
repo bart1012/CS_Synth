@@ -7,6 +7,7 @@ TO DO:
 --add voice options: mono, poly, arrpegiator, chord 
 -- allow second oscillator to be turned on / off
 - seperate concerns - Keep MappedSignalGenerator focused only on generating raw waveforms - move filters and effects elsewhere 
+-while wasapi is playing,  it will continosuly read from buffer, if buffer source reaches the end, it will automatically be removed -  you cannot retain signals that have not started
 
 ---docs:
 
