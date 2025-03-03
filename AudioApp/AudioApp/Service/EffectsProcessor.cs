@@ -15,6 +15,7 @@ namespace AudioApp.Service
         public EffectsProcessor(MixingSampleProvider mixer)
         {
             _mixer = mixer;
+            _effects = new();
         }
 
         public void AddToMix(ISampleProvider signal)
@@ -32,23 +33,20 @@ namespace AudioApp.Service
             _mixer.RemoveAllMixerInputs();
         }
 
+        public void AddEffect(IAudioEffect effect)
+        {
+            _effects.Add(effect);
+        }
+
         public int Read(float[] buffer, int offset, int count)
         {
             int samplesRead = _mixer.Read(buffer, offset, count);
             if (samplesRead == 0) return 0;
-
-            double frequency = 5.0;
-            double sampleRate = 44100.0;
-            double phaseIncrement = (Math.PI * 2 * frequency) / sampleRate;
-
-            for (int i = 0; i < samplesRead; i++)
+            else if (_effects.Count == 0) return samplesRead;
+            _effects.ForEach(effect =>
             {
-                double tremoloValue = 1 + 0.5 * Math.Sin(phase);
-                buffer[offset + i] *= (float)tremoloValue;
-
-                phase += phaseIncrement;
-                if (phase > Math.PI * 2) phase -= Math.PI * 2;
-            }
+                effect.Process(buffer, samplesRead);
+            });
 
             return samplesRead;
 

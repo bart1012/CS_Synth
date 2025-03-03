@@ -2,6 +2,6 @@
 {
     public interface IAudioEffect
     {
-        public int Process(float[] buffer, int offset, int count);
+        public void Process(float[] buffer, int samplesRead);
     }
 }
