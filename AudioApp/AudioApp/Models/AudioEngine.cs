@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿using AudioApp.Service;
+using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System.Windows.Input;
 
@@ -12,6 +13,7 @@ namespace AudioApp.Models
         private Dictionary<Key, double> _frequencyMappings;
         private List<OscillatorSettings> _oscillators = new();
         private Dictionary<Key, ADSREnvelopeProvider> _activeNotes = new();
+        private EffectsProcessor effectsProcessor;
 
         private AudioEngine()
         {
@@ -24,7 +26,8 @@ namespace AudioApp.Models
             {
                 Type = SignalGeneratorType.Sin,
                 Gain = 0.5,
-                Octave = 2
+                Octave = 2,
+                Pan = 0
             });
             _frequencyMappings = new Dictionary<Key, double>
             {
@@ -42,7 +45,8 @@ namespace AudioApp.Models
                 { Key.J,  246.94 },  // B3
                 { Key.K,  261.63 }   // C4
             };
-            _wasapiOut.Init(_mixer);
+            effectsProcessor = new(_mixer);
+            _wasapiOut.Init(effectsProcessor);
         }
 
         public static AudioEngine GetInstance()
@@ -79,7 +83,8 @@ namespace AudioApp.Models
             SignalGenerator baseSignal = GenerateBaseSignal(key, _oscillators[0]);
             ADSREnvelopeProvider signal = (ADSREnvelopeProvider)ApplyADSR(baseSignal);
             _activeNotes[key] = signal;
-            _mixer.AddMixerInput(signal.ToStereo());
+            //_mixer.AddMixerInput(signal.ToStereo());
+            effectsProcessor.AddToMix(signal.ToStereo());
             signal.Start();
         }
 

@@ -7,5 +7,6 @@ namespace AudioApp.Models
         public SignalGeneratorType Type { get; set; }
         public double Gain { get; set; }
         public int Octave { get; set; }
+        public float Pan { get; set; }
     }
 }
