@@ -26,7 +26,7 @@ namespace AudioApp.Models
             {
                 Type = SignalGeneratorType.Sin,
                 Gain = 0.5,
-                Octave = 2,
+                Octave = 1,
                 Pan = 0
             });
             _frequencyMappings = new Dictionary<Key, double>
@@ -46,7 +46,7 @@ namespace AudioApp.Models
                 { Key.K,  261.63 }   // C4
             };
             effectsProcessor = new(_mixer);
-            effectsProcessor.AddEffect(new AmplitudeModulation());
+            effectsProcessor.AddEffect(new AmplitudeModulation(2.0, 0.5));
             _wasapiOut.Init(effectsProcessor);
         }
 
@@ -62,7 +62,7 @@ namespace AudioApp.Models
         {
             return new SignalGenerator()
             {
-                Frequency = _frequencyMappings[key],
+                Frequency = _frequencyMappings[key] * Math.Pow(2, options.Octave),
                 Type = options.Type,
                 Gain = options.Gain
             };
@@ -82,6 +82,7 @@ namespace AudioApp.Models
 
             if (!_frequencyMappings.ContainsKey(key)) return;
             SignalGenerator baseSignal = GenerateBaseSignal(key, _oscillators[0]);
+            Console.WriteLine((float)baseSignal.Frequency);
             ADSREnvelopeProvider signal = (ADSREnvelopeProvider)ApplyADSR(baseSignal);
             _activeNotes[key] = signal;
             //_mixer.AddMixerInput(signal.ToStereo());

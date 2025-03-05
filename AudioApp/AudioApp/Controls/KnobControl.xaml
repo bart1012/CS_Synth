@@ -11,33 +11,40 @@
              mc:Ignorable="d" 
 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <LinearGradientBrush x:Key="InnerDialFillResource">
-                <LinearGradientBrush.StartPoint>0.5,1.0</LinearGradientBrush.StartPoint>
-                <LinearGradientBrush.EndPoint>0.5,0.0</LinearGradientBrush.EndPoint>
-                <GradientStop Color="#BBBBBB" Offset="0"/>
-                <GradientStop Color="#DDDDDD" Offset="1.0"/>
-            </LinearGradientBrush>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid Name="_grid" Width="200" 
 
-    Height="200" Background="White">
-
-        <Ellipse x:Name="_ellipseOuterDial" Width="130"
-        Height="130"
-
-        Fill="White">
-            
-            <Ellipse.Effect>
-                <DropShadowEffect Color="LightGray" BlurRadius="20"  />
-            </Ellipse.Effect>
-        </Ellipse>
-        <TextBlock x:Name="_innerCaption" MouseUp="_innerCaption_MouseUp" MouseLeftButtonDown="_innerCaption_MouseDown" MouseMove="_innerCaption_MouseMove" Width="130" Height="20" TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Caption, RelativeSource={RelativeSource AncestorType=UserControl}}" 
-></TextBlock>
+    <Grid Name="_grid" Width="150" Height="150" Background="Transparent"   MouseDown="_innerCaption_MouseDown"
+           MouseMove="_innerCaption_MouseMove"
+           MouseUp="_innerCaption_MouseUp">
+        <TextBlock x:Name="Label" VerticalAlignment="Bottom" Width="150" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,20" FontSize="16" FontWeight="Normal" FontFamily="Segoe UI" Text="{Binding LabelText, RelativeSource={RelativeSource AncestorType=UserControl}}"></TextBlock>
+        <Image Width="60" Grid.Column="3"  Grid.Row="2" Grid.RowSpan="2" Margin="2,0,0,5">
+            <Image.Source>
+                <BitmapImage DecodePixelWidth="200" UriSource="/Assets/KnobControl.png" />
+            </Image.Source>
+        </Image>
+        <Path x:Name="ArcPath" Stroke="Gray" StrokeThickness="5" Fill="Transparent">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="40,100">
+                        <ArcSegment Point="110,100" 
+                            Size="45,45"
+                            IsLargeArc="True"
+                            SweepDirection="Clockwise"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
+        <Path x:Name="FillArcPath" Stroke="Red" StrokeThickness="5" Fill="Transparent">
+            <Path.Data>
+                <PathGeometry>
+                    <PathFigure StartPoint="40,100">
+                        <ArcSegment Point="40,100" 
+                    Size="45,45"
+                    IsLargeArc="True"
+                    SweepDirection="Clockwise" IsSmoothJoin="False"/>
+                    </PathFigure>
+                </PathGeometry>
+            </Path.Data>
+        </Path>
        
-
-
     </Grid>
 </UserControl>
