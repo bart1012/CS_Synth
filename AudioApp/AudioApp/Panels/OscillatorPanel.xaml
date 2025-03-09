@@ -1,0 +1,51 @@
+﻿<UserControl x:Class="AudioApp.Panels.OscillatorPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AudioApp.Panels"
+             xmlns:controls="clr-namespace:AudioApp.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="white" Width="{Binding Width, RelativeSource={RelativeSource AncestorType=UserControl}}" Height="{Binding Height, RelativeSource={RelativeSource AncestorType=UserControl}}">
+        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="35"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Margin="25"/>
+        <Grid Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="Column1" Width="1.5*"></ColumnDefinition>
+                <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+                <ColumnDefinition Width="5*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+
+            </Grid.RowDefinitions>
+            <TextBlock Text="Osc. 1" 
+    Background="white"
+    TextAlignment="Center"
+    FontSize="35"
+    Height="{Binding ActualWidth, ElementName=Column1}"
+       
+    Grid.Column="0"
+         Grid.Row="2" Grid.RowSpan="2">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90"/>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+            <controls:SliderControl Grid.Column="1" Grid.RowSpan="4" Grid.Row="1"></controls:SliderControl>
+            <controls:KnobControl Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"></controls:KnobControl>
+            <controls:KnobControl Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"></controls:KnobControl>
+        </Grid>
+
+
+    </Grid>
+</UserControl>
