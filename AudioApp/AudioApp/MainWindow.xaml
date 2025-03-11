@@ -23,7 +23,7 @@
             <RowDefinition Height="3*" />
         </Grid.RowDefinitions>
 
-        <panels:OscillatorPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch"></panels:OscillatorPanel>
+        <panels:OscillatorPanel></panels:OscillatorPanel>
 
 
     </Grid>

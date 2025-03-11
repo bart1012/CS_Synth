@@ -30,13 +30,12 @@
 
             </Grid.RowDefinitions>
             <TextBlock Text="Osc. 1" 
-    Background="white"
-    TextAlignment="Center"
-    FontSize="35"
-    Height="{Binding ActualWidth, ElementName=Column1}"
-       
-    Grid.Column="0"
-         Grid.Row="2" Grid.RowSpan="2">
+                Background="white"
+                TextAlignment="Center"
+                FontSize="35"
+                Height="{Binding ActualWidth, ElementName=Column1}"
+                Grid.Column="0"
+                Grid.Row="2" Grid.RowSpan="2">
                 <TextBlock.LayoutTransform>
                     <RotateTransform Angle="-90"/>
                 </TextBlock.LayoutTransform>

@@ -9,7 +9,7 @@ namespace AudioApp.Panels
     public partial class OscillatorPanel : UserControl
     {
 
-        public static new readonly DependencyProperty HeightProperty = DependencyProperty.Register(nameof(Height), typeof(int), typeof(OscillatorPanel), new PropertyMetadata("Height"));
+        public static new readonly DependencyProperty HeightProperty = DependencyProperty.Register(nameof(Height), typeof(int), typeof(OscillatorPanel), new PropertyMetadata(default(int)));
 
         public new int Height
         {
@@ -17,7 +17,7 @@ namespace AudioApp.Panels
             set => SetValue(HeightProperty, value);
         }
 
-        public static new readonly DependencyProperty WidthProperty = DependencyProperty.Register(nameof(Width), typeof(int), typeof(OscillatorPanel), new PropertyMetadata("Width"));
+        public static new readonly DependencyProperty WidthProperty = DependencyProperty.Register(nameof(Width), typeof(int), typeof(OscillatorPanel), new PropertyMetadata(default(int)));
 
         public new int Width
         {

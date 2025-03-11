@@ -1,4 +1,4 @@
-﻿    <UserControl x:Class="AudioApp.Controls.KnobControl"
+﻿<UserControl x:Class="AudioApp.Controls.KnobControl"
 
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 
@@ -11,44 +11,68 @@
              mc:Ignorable="d" 
 
              d:DesignHeight="450" d:DesignWidth="800">
-  
-    <Grid Name="_grid" Width="150" Height="150" Background="Transparent"   MouseDown="_innerCaption_MouseDown"
+
+    <Grid Name="_grid" Width="150" Height="150" Background="White"   MouseDown="_innerCaption_MouseDown"
            MouseMove="_innerCaption_MouseMove"
            MouseUp="_innerCaption_MouseUp">
         <TextBlock x:Name="Label" VerticalAlignment="Bottom" Width="150" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="16" FontWeight="Normal" FontFamily="Segoe UI" Text="{Binding LabelText, RelativeSource={RelativeSource AncestorType=UserControl}}"></TextBlock>
 
-        <Ellipse Width="80" Height="80" Fill="Black" Opacity="0.19">
-            <Ellipse.Effect>
-                <BlurEffect Radius="8"/>
-            </Ellipse.Effect>
-        </Ellipse>
-        <Ellipse Width="75" Height="75" Fill="White" />
+        <Canvas  Width="150" Height="150">
+
+            <Ellipse Width="55" Height="55" Fill="#FFD8D8D8" Opacity="0.20"  Canvas.Left="48" Canvas.Top="48">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="4"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="50" Height="50" Fill="White"  Canvas.Left="50" Canvas.Top="50" Stroke="Gray" StrokeThickness="0.5">
+                <Ellipse.Effect>
+                    <DropShadowEffect Opacity="0.5" Direction="299" BlurRadius="6" ShadowDepth="5"/>
+                </Ellipse.Effect>
+            </Ellipse>
+
+            <Ellipse Width="50" Height="50"  Canvas.Left="50" Canvas.Top="50" Stroke="Gray" StrokeThickness="0.5">
+                <Ellipse.Fill>
+                    <LinearGradientBrush EndPoint="1,1" StartPoint="0.5,0">
+                        <LinearGradientBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
+                                <SkewTransform CenterX="0.5" CenterY="0.5"/>
+                                <RotateTransform CenterX="0.5" CenterY="0.5"/>
+                                <TranslateTransform X="0" Y="0"/>
+                            </TransformGroup>
+                        </LinearGradientBrush.RelativeTransform>
+                        <GradientStop Color="White" Offset="0"/>
+                        <GradientStop Color="#FFEFEFEF" Offset="1"/>
+                    </LinearGradientBrush>
+                </Ellipse.Fill>
+            </Ellipse>
 
 
-        <Ellipse Width="50" Height="50" Fill="White" >
-            <Ellipse.Effect>
-                <DropShadowEffect Opacity="0.5" Direction="299" BlurRadius="6" ShadowDepth="5"/>
-            </Ellipse.Effect>
-        </Ellipse>
-        <Ellipse Fill="White" Margin="50,50,50,50" >
-            <Ellipse.Effect>
-                <DropShadowEffect Opacity="0.095" Direction="144" BlurRadius="18" ShadowDepth="5"/>
-            </Ellipse.Effect>
-        </Ellipse>
-
-
-        <ProgressBar x:Name="AmountProgressBar" Value="100"
-         Width="200"
-         Height="200"
-         VerticalAlignment="Center"
-         HorizontalAlignment="Center"
-         Style="{StaticResource MaterialDesignCircularProgressBar}"
-         Foreground="Gray">
-            <ProgressBar.LayoutTransform>
-                <ScaleTransform CenterX="0.05" CenterY="0.05" ScaleX="0.5" ScaleY="0.5" />
-            </ProgressBar.LayoutTransform>
-        </ProgressBar>
-
+            <Border Width="13" Height="4"  Canvas.Left="55" Canvas.Top="75"
+ RenderTransformOrigin="0.5,1" BorderBrush="Transparent" BorderThickness="1" CornerRadius="2">
+                <Border.Background>
+                    <RadialGradientBrush Center="0.5,0.5">
+                        <GradientStop Color="#FFC8C8C8" Offset="0"/>
+                        <GradientStop Color="Gray" Offset="1"/>
+                    </RadialGradientBrush>
+                </Border.Background>
+            </Border>
+            <Path Canvas.Left="37.5" Canvas.Top="38" Stroke="Gray"
+                    StrokeThickness="5"
+                    Fill="Transparent"
+                    StrokeDashArray="0.15 1"
+                    Data="M -16.864 6.007 Q -18.958 3.399 -19 0 Q -18.83 -5.364 -14.29 -8.223 Q -9.29 -10.905 -4.441 -8.042 Q -0.22 -5.374 0 0 Q -0.023 3.408 -2.131 6" HorizontalAlignment="Center" Height="62" Stretch="Fill" VerticalAlignment="Center" Width="75" RenderTransformOrigin="0.5,0.5">
+                <Path.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0.245"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Path.RenderTransform>
+            </Path>
+        </Canvas>
 
     </Grid>
 </UserControl>

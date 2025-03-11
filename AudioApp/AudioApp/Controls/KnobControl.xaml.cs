@@ -43,7 +43,7 @@ namespace AudioApp.Controls
             double normalizedY = Math.Clamp(100 - mousePos.Y, 0, 100); // Invert Y (up = increase)
 
             // Combine X and Y influence
-            AmountProgressBar.Value = Math.Clamp((normalizedX + normalizedY) / 2, 0, 100);
+            //AmountProgressBar.Value = Math.Clamp((normalizedX + normalizedY) / 2, 0, 100);
 
 
         }
