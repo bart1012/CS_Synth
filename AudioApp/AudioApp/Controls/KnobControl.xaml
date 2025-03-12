@@ -10,69 +10,78 @@
 
              mc:Ignorable="d" 
 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="120" d:DesignWidth="120">
 
-    <Grid Name="_grid" Width="150" Height="150" Background="White"   MouseDown="_innerCaption_MouseDown"
-           MouseMove="_innerCaption_MouseMove"
-           MouseUp="_innerCaption_MouseUp">
-        <TextBlock x:Name="Label" VerticalAlignment="Bottom" Width="150" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0" FontSize="16" FontWeight="Normal" FontFamily="Segoe UI" Text="{Binding LabelText, RelativeSource={RelativeSource AncestorType=UserControl}}"></TextBlock>
+    <Viewbox x:Name="BoundingBox" Stretch="Uniform">
+        <Grid Name="_grid" Width="120" Height="120" Background="GhostWhite"  
+              MouseDown="_innerCaption_MouseDown"
+              MouseMove="_innerCaption_MouseMove"
+     
+            >
 
-        <Canvas  Width="150" Height="150">
+            <TextBlock x:Name="Label" VerticalAlignment="Bottom" Width="120" 
+                       TextAlignment="Center" HorizontalAlignment="Center" 
+                       FontSize="16" FontWeight="Normal" FontFamily="Segoe UI" 
+                       Foreground="Gray"
+                       Text="{Binding LabelText, RelativeSource={RelativeSource AncestorType=UserControl}}" Margin="0, 0, 0, 10"/>
 
-            <Ellipse Width="55" Height="55" Fill="#FFD8D8D8" Opacity="0.20"  Canvas.Left="48" Canvas.Top="48">
-                <Ellipse.Effect>
-                    <BlurEffect Radius="4"/>
-                </Ellipse.Effect>
-            </Ellipse>
+            <Canvas Width="120" Height="120">
+                <Ellipse Width="55" Height="55" Fill="#FFD8D8D8" Opacity="0.20"  
+                         Canvas.Left="32.5" Canvas.Top="32.5">
+                    <Ellipse.Effect>
+                        <BlurEffect Radius="4"/>
+                    </Ellipse.Effect>
+                </Ellipse>
 
-            <Ellipse Width="50" Height="50" Fill="White"  Canvas.Left="50" Canvas.Top="50" Stroke="Gray" StrokeThickness="0.5">
-                <Ellipse.Effect>
-                    <DropShadowEffect Opacity="0.5" Direction="299" BlurRadius="6" ShadowDepth="5"/>
-                </Ellipse.Effect>
-            </Ellipse>
+                <Ellipse Width="50" Height="50" Fill="White"  Canvas.Left="34.5" 
+                         Canvas.Top="34.5" Stroke="Gray" StrokeThickness="0.5">
+                    <Ellipse.Effect>
+                        <DropShadowEffect Opacity="0.5" Direction="299" 
+                                          BlurRadius="6" ShadowDepth="5"/>
+                    </Ellipse.Effect>
+                </Ellipse>
 
-            <Ellipse Width="50" Height="50"  Canvas.Left="50" Canvas.Top="50" Stroke="Gray" StrokeThickness="0.5">
-                <Ellipse.Fill>
-                    <LinearGradientBrush EndPoint="1,1" StartPoint="0.5,0">
-                        <LinearGradientBrush.RelativeTransform>
-                            <TransformGroup>
-                                <ScaleTransform CenterY="0.5" CenterX="0.5"/>
-                                <SkewTransform CenterX="0.5" CenterY="0.5"/>
-                                <RotateTransform CenterX="0.5" CenterY="0.5"/>
-                                <TranslateTransform X="0" Y="0"/>
-                            </TransformGroup>
-                        </LinearGradientBrush.RelativeTransform>
-                        <GradientStop Color="White" Offset="0"/>
-                        <GradientStop Color="#FFEFEFEF" Offset="1"/>
-                    </LinearGradientBrush>
-                </Ellipse.Fill>
-            </Ellipse>
+                <Ellipse Width="50" Height="50" Canvas.Left="34.5" Canvas.Top="34.5" 
+                         Stroke="Gray" StrokeThickness="0.5">
+                    <Ellipse.Fill>
+                        <LinearGradientBrush EndPoint="1,1" StartPoint="0.5,0">
+                            <GradientStop Color="White" Offset="0"/>
+                            <GradientStop Color="#FFEFEFEF" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
 
+                <Grid x:Name="InnerDialMarker" Canvas.Left="34.5" Canvas.Top="34.5">
+                    <Ellipse Width="50" Height="50" />
+                    <Border Width="13" Height="4"
+                     Background="Gray"
+                     BorderThickness="1" CornerRadius="2" 
+                            Margin="-30,0,0,0"/>
+                    <Grid.RenderTransform>
+                        <RotateTransform Angle="320" CenterY="25" CenterX="25"></RotateTransform>
+                    </Grid.RenderTransform>
+                </Grid>
+          
+               
+                
 
-            <Border Width="13" Height="4"  Canvas.Left="55" Canvas.Top="75"
- RenderTransformOrigin="0.5,1" BorderBrush="Transparent" BorderThickness="1" CornerRadius="2">
-                <Border.Background>
-                    <RadialGradientBrush Center="0.5,0.5">
-                        <GradientStop Color="#FFC8C8C8" Offset="0"/>
-                        <GradientStop Color="Gray" Offset="1"/>
-                    </RadialGradientBrush>
-                </Border.Background>
-            </Border>
-            <Path Canvas.Left="37.5" Canvas.Top="38" Stroke="Gray"
-                    StrokeThickness="5"
-                    Fill="Transparent"
-                    StrokeDashArray="0.15 1"
-                    Data="M -16.864 6.007 Q -18.958 3.399 -19 0 Q -18.83 -5.364 -14.29 -8.223 Q -9.29 -10.905 -4.441 -8.042 Q -0.22 -5.374 0 0 Q -0.023 3.408 -2.131 6" HorizontalAlignment="Center" Height="62" Stretch="Fill" VerticalAlignment="Center" Width="75" RenderTransformOrigin="0.5,0.5">
-                <Path.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="0.245"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Path.RenderTransform>
-            </Path>
-        </Canvas>
-
-    </Grid>
+                <Path Canvas.Left="22" Canvas.Top="22.5" Stroke="Gray"
+                      StrokeThickness="5" Fill="Transparent"
+                      StrokeDashArray="0.15 1"
+                      Data="M -16.864 6.007 Q -18.958 3.399 -19 0 Q -18.83 -5.364 -14.29 -8.223 Q -9.29 -10.905 -4.441 -8.042 Q -0.22 -5.374 0 0 Q -0.023 3.408 -2.131 6" 
+                      HorizontalAlignment="Center" Height="62" 
+                      Stretch="Fill" VerticalAlignment="Center" Width="75" 
+                      RenderTransformOrigin="0.5,0.5">
+                    <Path.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="0.245"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Path.RenderTransform>
+                </Path>
+            </Canvas>
+        </Grid>
+    </Viewbox>
 </UserControl>

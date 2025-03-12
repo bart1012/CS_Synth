@@ -7,7 +7,7 @@
              xmlns:controls="clr-namespace:AudioApp.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="white" Width="{Binding Width, RelativeSource={RelativeSource AncestorType=UserControl}}" Height="{Binding Height, RelativeSource={RelativeSource AncestorType=UserControl}}">
+    <Grid Background="GhostWhite" Width="600" Height="200">
         <Border BorderBrush="Black" BorderThickness="1" CornerRadius="35"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
@@ -15,34 +15,39 @@
         <Grid Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition x:Name="Column1" Width="1.5*"></ColumnDefinition>
-                <ColumnDefinition Width="1.5*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
                 <ColumnDefinition Width="5*"></ColumnDefinition>
                 <ColumnDefinition Width="5*"></ColumnDefinition>
                 <ColumnDefinition Width="5*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="5*"></RowDefinition>
                 <RowDefinition Height="5*"></RowDefinition>
-                <RowDefinition Height="5*"></RowDefinition>
-                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
                 <RowDefinition Height="1*"></RowDefinition>
 
             </Grid.RowDefinitions>
             <TextBlock Text="Osc. 1" 
-                Background="white"
+                Background="GhostWhite"
                 TextAlignment="Center"
-                FontSize="35"
-                Height="{Binding ActualWidth, ElementName=Column1}"
+                FontSize="24"
+                Height="35"
                 Grid.Column="0"
-                Grid.Row="2" Grid.RowSpan="2">
+                Grid.Row="2" Grid.RowSpan="2"
+                       Width="100">
                 <TextBlock.LayoutTransform>
                     <RotateTransform Angle="-90"/>
                 </TextBlock.LayoutTransform>
             </TextBlock>
-            <controls:SliderControl Grid.Column="1" Grid.RowSpan="4" Grid.Row="1"></controls:SliderControl>
-            <controls:KnobControl Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"></controls:KnobControl>
-            <controls:KnobControl Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"></controls:KnobControl>
+            <!--
+            <controls:KnobControl Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"></controls:KnobControl> 
+            <controls:KnobControl Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"></controls:KnobControl> 
+            <controls:KnobControl Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"></controls:KnobControl> 
+            -->
+            <controls:KnobControl Width="150" Height="120" Grid.Column="1" Grid.Row="2" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Gain"></controls:KnobControl> <!--gain-->
+            <controls:EllipseMenuControl Margin="15,0,0,0" Height="110" Grid.Column="2" Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Left"></controls:EllipseMenuControl>
         </Grid>
 
 
