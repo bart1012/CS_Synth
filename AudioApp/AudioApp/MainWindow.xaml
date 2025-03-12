@@ -26,6 +26,8 @@
 
         <panels:OscillatorPanel Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="3" Grid.Row="1"></panels:OscillatorPanel>
 
+        <controls:PianoKeyboardControl x:Name="Keyboard" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="3" HorizontalAlignment="Left"/>
+      
 
     </Grid>
 </Window>
