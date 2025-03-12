@@ -3,17 +3,80 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:AudioApp.Converters"
              xmlns:local="clr-namespace:AudioApp.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <ItemsControl x:Name="KeysContainer">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Canvas />
-                  
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </Grid>
+             d:DesignHeight="200" d:DesignWidth="1000">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="WhiteKeyTemplate">
+            <Button Width="40" Height="160" Background="White" BorderBrush="Black"
+           >
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="1"
+                        CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </DataTemplate>
+        <DataTemplate x:Key="BlackKeyTemplate">
+            <Button Width="30" Height="100" Background="Black" BorderBrush="Black"
+           >
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="1"
+                        CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </DataTemplate>
+        <converters:NoteToCanvasPositionConverter x:Key="NoteToCanvasPosConverter"></converters:NoteToCanvasPositionConverter>
+        <converters:NoteToZIndexConverter x:Key="NoteToZIndexConverter"></converters:NoteToZIndexConverter>
+    </UserControl.Resources>
+    <Viewbox Stretch="Uniform">
+        <Grid Width="1000" Height="200" Background="red">
+            <ItemsControl x:Name="KeysContainer" ItemsSource="{Binding PianoKeys}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas Background="Beige"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left">
+                            <Setter.Value>
+                                <MultiBinding Converter="{StaticResource NoteToCanvasPosConverter}">
+                                    <Binding Path="Index" />
+                                    <Binding Path="IsBlack" />
+                                    <Binding Path="Note" />
+                                    <Binding Path="Octave" />
+                                </MultiBinding>
+                            </Setter.Value>
+                        </Setter>
+                        <Setter Property="Canvas.ZIndex" Value="{Binding Note, Converter={StaticResource NoteToZIndexConverter}}" />
+                        <Setter Property="Control.Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType=Window}}" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsBlack}" Value="True">
+                                <Setter Property="ContentControl.ContentTemplate" Value="{StaticResource BlackKeyTemplate}" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsBlack}" Value="False">
+                                <Setter Property="ContentControl.ContentTemplate" Value="{StaticResource WhiteKeyTemplate}" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+
+        </Grid>
+    </Viewbox>
 </UserControl>

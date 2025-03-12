@@ -1,21 +1,32 @@
 ﻿using AudioApp.Models;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Controls;
 
 namespace AudioApp.Controls
 {
-    /// <summary>
-    /// Interaction logic for PianoKeyboardControl.xaml
-    /// </summary>
-    public partial class PianoKeyboardControl : UserControl
+    public partial class PianoKeyboardControl : UserControl, INotifyPropertyChanged
     {
-        public ObservableCollection<PianoKey> PianoKeys { get; set; }
+        private ObservableCollection<PianoKey> _pianoKeys;
+        public ObservableCollection<PianoKey> PianoKeys
+        {
+            get => _pianoKeys;
+            set
+            {
+                _pianoKeys = value;
+                OnPropertyChanged(nameof(PianoKeys)); // Notify UI
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         public PianoKeyboardControl()
         {
             InitializeComponent();
-            PianoKeys = GenerateKeyList();
-            KeysContainer.ItemsSource = PianoKeys;
+            DataContext = this; // Important to bind properties in XAML
+            PianoKeys = GenerateKeyList(); // Now UI will update
         }
 
         private ObservableCollection<PianoKey> GenerateKeyList()
@@ -23,19 +34,18 @@ namespace AudioApp.Controls
             var keyList = new ObservableCollection<PianoKey>();
             int octaves = 7;
             int index = 1;
-            string[] notes = ["C", "C#", "D", "D#", "E", "F", "G", "G#", "A", "A#", "B"];
+            string[] notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
             for (int i = 1; i <= octaves; i++)
             {
-                for (int j = 0; j <= notes.Length; j++)
+                for (int j = 0; j < notes.Length; j++)
                 {
                     bool isBlack = notes[j].Contains('#');
-                    PianoKey note = new PianoKey() { Note = notes[j] + i, isBlack = isBlack, Index = index };
+                    var note = new PianoKey { Note = notes[j], IsBlack = isBlack, Index = index, Octave = i };
+                    //Console.WriteLine(note);
                     keyList.Add(note);
                     index++;
-                    Console.WriteLine(note.ToString());
                 }
             }
-
             return keyList;
         }
     }
