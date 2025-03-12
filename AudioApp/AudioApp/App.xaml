@@ -1,9 +1,40 @@
 ﻿<Application x:Class="AudioApp.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:AudioApp"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <materialDesign:BundledTheme BaseTheme="Light" PrimaryColor="DeepPurple" SecondaryColor="Lime" />
+
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesign3.Defaults.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="CustomSliderStyle" TargetType="Slider">
+                <Setter Property="Width" Value="60"/>
+                <Setter Property="Height" Value="180"/>
+                <Setter Property="Orientation" Value="Vertical"/>
+                <Setter Property="Background" Value="Transparent"/>
+                <Setter Property="Foreground" Value="Black"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Slider">
+                            <Grid>
+                                <!-- Track -->
+                                <Border x:Name="PART_Track" Background="LightGray" Width="15" Height="100" HorizontalAlignment="Center" VerticalAlignment="Center" CornerRadius="7">
+                                    <!-- Filled Track -->
+                                    <Border x:Name="PART_SelectionRange" Background="DarkGray" Height="100" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                                </Border>
+
+                                <!-- Thumb -->
+                                <Thumb x:Name="PART_Thumb" Width="20" Height="20" Background="Blue" BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

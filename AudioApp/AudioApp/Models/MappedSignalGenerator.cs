@@ -20,9 +20,8 @@ namespace AudioApp.Models
 
 
 
-        public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain, int octave)
+        public MappedSignalGenerator(Key e, SignalGeneratorType type, float gain, double frequency)
         {
-            if (octave < 1 || octave > 3) throw new ArgumentException("Octave must be between 1 and 3");
             Key = e;
             float baseFrequency = e switch
             {
@@ -41,7 +40,7 @@ namespace AudioApp.Models
                 Key.K => 261.63f,  // C4
                 _ => 130.81f       // Default to C3
             };
-            Frequency = baseFrequency * MathF.Pow(2, octave - 1);
+            Frequency = frequency;
             Type = type;
             Gain = gain;
 
