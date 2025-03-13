@@ -24,9 +24,9 @@
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
 
-        <panels:OscillatorPanel Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="3" Grid.Row="1"></panels:OscillatorPanel>
+        <panels:OscillatorPanel x:Name="OscOnePanel"  Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"></panels:OscillatorPanel>
 
-        <controls:PianoKeyboardControl x:Name="Keyboard" Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="3" HorizontalAlignment="Left"/>
+        <controls:PianoKeyboardControl x:Name="Keyboard" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Grid.Row="3" />
       
 
     </Grid>
