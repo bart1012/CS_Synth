@@ -6,7 +6,7 @@
              xmlns:converters="clr-namespace:AudioApp.Converters"
              xmlns:local="clr-namespace:AudioApp.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="1000">
+             d:DesignHeight="200" d:DesignWidth="1960">
 
     <UserControl.Resources>
         <DataTemplate x:Key="WhiteKeyTemplate">
@@ -43,11 +43,11 @@
         <converters:NoteToZIndexConverter x:Key="NoteToZIndexConverter"></converters:NoteToZIndexConverter>
     </UserControl.Resources>
     <Viewbox Stretch="Uniform">
-        <Grid Width="1000" Height="200" Background="red">
+        <Grid Width="1960" Height="200" >
             <ItemsControl x:Name="KeysContainer" ItemsSource="{Binding PianoKeys}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas Background="Beige"/>
+                        <Canvas/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 

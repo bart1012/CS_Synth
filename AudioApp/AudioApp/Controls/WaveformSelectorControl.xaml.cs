@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace AudioApp.Controls
 {
     /// <summary>
-    /// Interaction logic for EllipseMenuControl.xaml
+    /// Interaction logic for WaveformSelectorControl.xaml
     /// </summary>
-    public partial class EllipseMenuControl : UserControl
+    public partial class WaveformSelectorControl : UserControl
     {
-        public EllipseMenuControl()
+        public WaveformSelectorControl()
         {
             InitializeComponent();
         }

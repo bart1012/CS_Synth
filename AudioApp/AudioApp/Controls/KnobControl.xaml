@@ -13,7 +13,7 @@
              d:DesignHeight="120" d:DesignWidth="120">
 
     <Viewbox x:Name="BoundingBox" Stretch="Uniform">
-        <Grid Name="_grid" Width="120" Height="120" Background="GhostWhite"  
+        <Grid Name="_grid" Width="120" Height="120" Background="Transparent"  
               MouseDown="_innerCaption_MouseDown"
               MouseMove="_innerCaption_MouseMove"
      
