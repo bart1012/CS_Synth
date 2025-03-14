@@ -23,8 +23,8 @@
             <RowDefinition Height="3*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
-        <panels:OscillatorPanel x:Name="OscOnePanel" Gain="{Binding OscOneGain, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=Window}}"
-  Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"></panels:OscillatorPanel>
+        
+        <panels:OscillatorPanel x:Name="OscOnePanel" Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"></panels:OscillatorPanel>
 
         <controls:PianoKeyboardControl x:Name="Keyboard" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Grid.Row="3" />
       

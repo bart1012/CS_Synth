@@ -18,3 +18,6 @@ Frequency = 500, // start frequency of the sweep
 FrequencyEnd = 2000, 
 Type = SignalGeneratorType.Sweep, 
 SweepLengthSecs = 2
+
+
+to control individual osc shape and detune, a derived class has to be made where those controls alter the wave 

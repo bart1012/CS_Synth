@@ -1,7 +1,7 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 
-namespace AudioApp.Service
+namespace AudioApp.Models
 {
     public class EffectsProcessor : ISampleProvider
     {

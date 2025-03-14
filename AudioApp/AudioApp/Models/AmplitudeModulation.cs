@@ -1,4 +1,4 @@
-﻿namespace AudioApp.Service
+﻿namespace AudioApp.Models
 {
     public class AmplitudeModulation : IAudioEffect
     {
@@ -17,7 +17,7 @@
         {
 
 
-            double phaseIncrement = (Math.PI * 2 * _frequency) / _sampleRate;
+            double phaseIncrement = Math.PI * 2 * _frequency / _sampleRate;
 
             for (int i = 0; i < samplesRead; i++)
             {

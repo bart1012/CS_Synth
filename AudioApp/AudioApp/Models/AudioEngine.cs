@@ -1,5 +1,4 @@
-﻿using AudioApp.Service;
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System.Windows.Input;
 
@@ -11,7 +10,7 @@ namespace AudioApp.Models
         private WasapiOut _wasapiOut;
         private MixingSampleProvider _mixer;
         private Dictionary<Key, double> _frequencyMappings;
-        private List<OscillatorSettings> _oscillators = new();
+        private Oscillator[] _oscillators = new Oscillator[2];
         private Dictionary<Key, ADSREnvelopeProvider> _activeNotes = new();
         private EffectsProcessor effectsProcessor;
 
@@ -22,13 +21,6 @@ namespace AudioApp.Models
             {
                 ReadFully = true
             };
-            _oscillators.Add(new OscillatorSettings
-            {
-                Type = SignalGeneratorType.Sin,
-                Gain = 0.5,
-                Octave = 1,
-                Pan = 0
-            });
             _frequencyMappings = new Dictionary<Key, double>
             {
                 { Key.A,  130.81 },  // C3
@@ -58,13 +50,13 @@ namespace AudioApp.Models
             }
             return _instance;
         }
-        private SignalGenerator GenerateBaseSignal(Key key, OscillatorSettings options)
+        private SignalGenerator GenerateBaseSignal(Key key, Oscillator osc)
         {
             return new SignalGenerator()
             {
-                Frequency = _frequencyMappings[key] * Math.Pow(2, options.Octave),
-                Type = options.Type,
-                Gain = options.Gain
+                Frequency = _frequencyMappings[key] * Math.Pow(2, osc.Octave),
+                Type = osc.Waveform,
+                Gain = osc.Gain
             };
 
         }
@@ -76,7 +68,6 @@ namespace AudioApp.Models
                 ReleaseSeconds = 2.0f
             };
         }
-
         public void NoteDown(Key key)
         {
 
@@ -88,38 +79,38 @@ namespace AudioApp.Models
             effectsProcessor.AddToMix(signal.ToStereo());
             signal.Start();
         }
-
         public void NoteUp(Key key)
         {
             if (!_frequencyMappings.ContainsKey(key)) return;
             _activeNotes[key].Stop();
         }
-
         public void SetOscillatorType(int targetOscillator, SignalGeneratorType type)
         {
             if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
-            _oscillators[targetOscillator].Type = type;
+            _oscillators[targetOscillator].Waveform = type;
         }
-
         public void SetOscillatorGain(int targetOscillator, double gain)
         {
             if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
             _oscillators[targetOscillator].Gain = gain;
         }
-
         public void SetOscillatorOctave(int targetOscillator, int octave)
         {
             if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
             _oscillators[targetOscillator].Octave = octave;
         }
-
+        public void AddOscillator(Oscillator osc)
+        {
+            if (_oscillators[0] != null && _oscillators[1] != null) throw new InvalidOperationException("You cannot add more than 2 oscillators.");
+            if (_oscillators[0] is null) _oscillators[0] = osc;
+            else _oscillators[1] = osc;
+        }
         public void Play()
         {
 
             _wasapiOut.Play();
 
         }
-
         public void Stop()
         {
             if (_wasapiOut.PlaybackState == PlaybackState.Playing)

@@ -28,12 +28,12 @@ namespace AudioApp.Models
 
         public static readonly DependencyProperty OctaveProperty =
               DependencyProperty.Register(nameof(Octave), typeof(int), typeof(Oscillator),
-                  new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnOctaveChanged));
+                  new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnOctaveChanged));
 
         public int Octave
         {
             get => (int)GetValue(OctaveProperty);
-            set => SetValue(GainProperty, value);
+            set => SetValue(OctaveProperty, value);
         }
 
 
