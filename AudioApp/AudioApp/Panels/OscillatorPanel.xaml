@@ -45,8 +45,8 @@
             <controls:KnobControl Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"></controls:KnobControl> 
             <controls:KnobControl Grid.Column="2" Grid.Row="3" Grid.RowSpan="2"></controls:KnobControl> 
             -->
-            <controls:KnobControl x:Name="GainControl" Width="120" Height="120" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Gain"></controls:KnobControl> <!--gain-->
-            <controls:KnobControl Width="120" Height="120" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Pitch"></controls:KnobControl> <!--detune-->
+            <controls:KnobControl x:Name="GainControl"  Value="{Binding Gain, Mode=TwoWay, RelativeSource={RelativeSource AncestorType=UserControl}}"  Width="120" Height="120" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Gain"></controls:KnobControl> <!--gain-->
+            <controls:KnobControl Width="120" Height="120" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Detune"></controls:KnobControl> <!--detune-->
             <controls:KnobControl Width="120" Height="120" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Shape"></controls:KnobControl>
             <controls:KnobControl Width="120" Height="120" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Octave"></controls:KnobControl>
 
