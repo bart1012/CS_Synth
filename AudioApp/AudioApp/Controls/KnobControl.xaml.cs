@@ -15,20 +15,18 @@ namespace AudioApp.Controls
         private bool _isDragged = false;
         private double _currentAngle = 320;
         private Point _lastMousePosition;
-        private double _amount { get; set; } = 0.0;
 
-        public Action<double> AmountChanged { get; set; }
-        public double Amount
+        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(double), typeof(KnobControl), new PropertyMetadata(default(double)));
+        public double Value
         {
-            get => _amount;
+            get => (double)GetValue(ValueProperty);
             set
             {
-                if (value < 0) _amount = 0.0;
-                else if (value > 1.0) _amount = 1.0;
+                if (value < 0) SetValue(ValueProperty, 0.0);
+                else if (value > 1.0) SetValue(ValueProperty, 1.0);
                 else
                 {
-                    _amount = value;
-                    AmountChanged?.Invoke(_amount);
+                    SetValue(ValueProperty, value);
                 }
             }
         }
@@ -94,7 +92,7 @@ namespace AudioApp.Controls
             InnerDialMarker.RenderTransform = rotateTransform;
 
             // Set amount property
-            Amount = (_currentAngle - 320) / 260;
+            Value = (_currentAngle - 320) / 260;
 
 
             // Store current position 

@@ -82,7 +82,6 @@ namespace AudioApp.Models
 
             if (!_frequencyMappings.ContainsKey(key)) return;
             SignalGenerator baseSignal = GenerateBaseSignal(key, _oscillators[0]);
-            Console.WriteLine((float)baseSignal.Frequency);
             ADSREnvelopeProvider signal = (ADSREnvelopeProvider)ApplyADSR(baseSignal);
             _activeNotes[key] = signal;
             //_mixer.AddMixerInput(signal.ToStereo());
