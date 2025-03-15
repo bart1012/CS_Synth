@@ -17,6 +17,7 @@ namespace AudioApp
             DataContext = this;
             audioEngine = AudioEngine.GetInstance();
             audioEngine.AddOscillator(OscOnePanel.Oscillator);
+            audioEngine.AddOscillator(OscTwoPanel.Oscillator);
             audioEngine.Play();
 
         }

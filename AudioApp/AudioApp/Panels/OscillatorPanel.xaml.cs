@@ -1,4 +1,5 @@
 ﻿using AudioApp.Models;
+using System.Windows;
 
 namespace AudioApp.Panels
 {
@@ -8,6 +9,14 @@ namespace AudioApp.Panels
     public partial class OscillatorPanel : System.Windows.Controls.UserControl
     {
         public Oscillator Oscillator { get; private set; }
+
+        public static readonly DependencyProperty FrameTitleProperty = DependencyProperty.Register(nameof(FrameTitle), typeof(String), typeof(OscillatorPanel));
+
+        public string FrameTitle
+        {
+            get => (String)GetValue(FrameTitleProperty);
+            set => SetValue(FrameTitleProperty, value);
+        }
 
         public OscillatorPanel()
         {

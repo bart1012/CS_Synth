@@ -12,7 +12,7 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Stretch"
             Margin="25"/>
-        <TextBlock Text="Osc. One" 
+        <TextBlock Text="{Binding FrameTitle, RelativeSource={RelativeSource AncestorType=UserControl}}" 
          Background="GhostWhite"
          TextAlignment="Center"
          FontSize="24"
@@ -42,8 +42,8 @@
 
 
             <controls:KnobControl x:Name="GainControl"  Value="{Binding Gain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="120" Height="120" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Gain"></controls:KnobControl> <!--gain-->
-            <controls:KnobControl x:Name="ShapeControl" Value="{Binding Shape, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" Height="120" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Detune"></controls:KnobControl> <!--detune-->
-            <controls:KnobControl x:Name="DetuneControl" Value="{Binding Detune, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" Height="120" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Shape"></controls:KnobControl>
+            <controls:KnobControl x:Name="ShapeControl" Value="{Binding Shape, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" Height="120" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Shape"></controls:KnobControl> <!--detune-->
+            <controls:KnobControl x:Name="DetuneControl" Value="{Binding Detune, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="120" Height="120" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Detune"></controls:KnobControl>
             <controls:KnobControl x:Name="OctaveControl" Width="120" Height="120" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Octave"></controls:KnobControl>
 
             <controls:WaveformSelectorControl Waveform="{Binding Waveform, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.RowSpan="2" Width="35" HorizontalAlignment="Left"></controls:WaveformSelectorControl>

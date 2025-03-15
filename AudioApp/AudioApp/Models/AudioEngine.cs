@@ -11,7 +11,7 @@ namespace AudioApp.Models
         private MixingSampleProvider _mixer;
         private Dictionary<Key, double> _frequencyMappings;
         private Oscillator[] _oscillators = new Oscillator[2];
-        private Dictionary<Key, ADSREnvelopeProvider> _activeNotes = new();
+        private Dictionary<Key, List<ADSREnvelopeProvider>> _activeNotes = new();
         private EffectsProcessor effectsProcessor;
 
         private AudioEngine()
@@ -54,7 +54,7 @@ namespace AudioApp.Models
         {
             return new SignalGenerator()
             {
-                Frequency = _frequencyMappings[key] * Math.Pow(2, osc.Octave),
+                Frequency = (_frequencyMappings[key] * Math.Pow(2, osc.Octave)) * Math.Pow(2, (osc.Detune * 100) / 1200),
                 Type = osc.Waveform,
                 Gain = osc.Gain
             };
@@ -72,18 +72,39 @@ namespace AudioApp.Models
         {
 
             if (!_frequencyMappings.ContainsKey(key)) return;
-            SignalGenerator baseSignal = GenerateBaseSignal(key, _oscillators[0]);
-            ADSREnvelopeProvider signal = (ADSREnvelopeProvider)ApplyADSR(baseSignal);
-            _activeNotes[key] = signal;
-            //_mixer.AddMixerInput(signal.ToStereo());
-            effectsProcessor.AddToMix(signal.ToStereo());
-            signal.Start();
+            if (!_activeNotes.ContainsKey(key)) _activeNotes[key] = new(2);
+
+            for (int i = 0; i < 2; i++)
+            {
+                SignalGenerator baseSignal = GenerateBaseSignal(key, _oscillators[i]);
+                ADSREnvelopeProvider signal = (ADSREnvelopeProvider)ApplyADSR(baseSignal);
+
+                if (_activeNotes[key].Count() < 2)
+                {
+                    _activeNotes[key].Add(signal);
+                }
+                else
+                {
+                    _activeNotes[key][i] = signal;
+                }
+
+                //_mixer.AddMixerInput(signal.ToStereo());
+                effectsProcessor.AddToMix(signal.ToStereo());
+                signal.Start();
+            }
+
+
+
         }
         public void NoteUp(Key key)
         {
             if (!_frequencyMappings.ContainsKey(key)) return;
-            _activeNotes[key].Stop();
+            foreach (var signal in _activeNotes[key])
+            {
+                signal.Stop();
+            }
         }
+
         public void SetOscillatorType(int targetOscillator, SignalGeneratorType type)
         {
             if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
