@@ -1,4 +1,4 @@
-﻿namespace AudioApp.Service
+﻿namespace AudioApp.Models
 {
     public interface IAudioEffect
     {
