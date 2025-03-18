@@ -12,10 +12,10 @@
     
     <Grid Margin="10"> 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="6*" />
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
@@ -26,9 +26,9 @@
         
         <panels:OscillatorPanel x:Name="OscOnePanel" FrameTitle="Osc. One" Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"></panels:OscillatorPanel>
         <panels:OscillatorPanel x:Name="OscTwoPanel" FrameTitle="Osc. Two" Grid.Column="1" HorizontalAlignment="Left" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="2"></panels:OscillatorPanel>
+        <panels:VolumeEnvelopePanel x:Name="VolumeEnvelopePanel" Grid.Column="2" Grid.ColumnSpan="2" Grid.RowSpan="2" HorizontalAlignment="Left"></panels:VolumeEnvelopePanel>
 
         <controls:PianoKeyboardControl x:Name="Keyboard" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" Grid.Row="3" />
-      
 
     </Grid>
 </Window>

@@ -39,6 +39,18 @@ namespace AudioApp.Models
             }
         }
 
+        public float SustainSeconds
+        {
+            get => adsr.SustainLevel;
+            set => adsr.SustainLevel = value;
+        }
+
+        public float DecaySeconds
+        {
+            get => adsr.DecayRate;
+            set => adsr.DecayRate = value;
+        }
+
         public WaveFormat WaveFormat => source.WaveFormat;
 
         public ADSREnvelopeProvider(ISampleProvider source)
@@ -55,6 +67,22 @@ namespace AudioApp.Models
             adsr.DecayRate = 0f * (float)WaveFormat.SampleRate;
             ReleaseSeconds = 0.3f;
         }
+
+        public ADSREnvelopeProvider(ISampleProvider source, VolumeEnvelopeWrapper env)
+        {
+            if (source.WaveFormat.Channels > 1)
+            {
+                throw new ArgumentException("Currently only supports mono inputs");
+            }
+
+            this.source = source;
+            adsr = new EnvelopeGenerator();
+            AttackSeconds = env.Attack;
+            adsr.SustainLevel = env.Sustain;
+            adsr.DecayRate = env.Decay * (float)WaveFormat.SampleRate;
+            ReleaseSeconds = env.Release;
+        }
+
         public int Read(float[] buffer, int offset, int count)
         {
             if (adsr.State == EnvelopeGenerator.EnvelopeState.Idle)

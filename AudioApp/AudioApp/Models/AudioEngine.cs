@@ -8,6 +8,7 @@ namespace AudioApp.Models
     {
         private static AudioEngine? _instance;
         private WasapiOut _wasapiOut;
+        private VolumeEnvelopeWrapper _volumeEnvelope;
         private MixingSampleProvider _mixer;
         private Dictionary<Key, double> _frequencyMappings;
         private Oscillator[] _oscillators = new Oscillator[2];
@@ -62,11 +63,8 @@ namespace AudioApp.Models
         }
         private ISampleProvider ApplyADSR(ISampleProvider source)
         {
-            return new ADSREnvelopeProvider(source.ToMono())
-            {
-                AttackSeconds = 0.05f,
-                ReleaseSeconds = 2.0f
-            };
+            return _volumeEnvelope is null ? new ADSREnvelopeProvider(source.ToMono()) : new ADSREnvelopeProvider(source.ToMono(), _volumeEnvelope);
+
         }
         public void NoteDown(Key key)
         {
@@ -105,20 +103,9 @@ namespace AudioApp.Models
             }
         }
 
-        public void SetOscillatorType(int targetOscillator, SignalGeneratorType type)
+        public void AddVolumeEnvelope(VolumeEnvelopeWrapper env)
         {
-            if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
-            _oscillators[targetOscillator].Waveform = type;
-        }
-        public void SetOscillatorGain(int targetOscillator, double gain)
-        {
-            if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
-            _oscillators[targetOscillator].Gain = gain;
-        }
-        public void SetOscillatorOctave(int targetOscillator, int octave)
-        {
-            if (targetOscillator < 0 || targetOscillator > _oscillators.Count() - 1) throw new InvalidOperationException("Oscillator not found.");
-            _oscillators[targetOscillator].Octave = octave;
+            _volumeEnvelope = env;
         }
         public void AddOscillator(Oscillator osc)
         {

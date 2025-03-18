@@ -9,18 +9,23 @@ namespace AudioApp.Controls
     /// </summary>
     public partial class WaveformSelectorControl : UserControl
     {
+        private static int _elementCounter = 0;
 
         public static readonly DependencyProperty WaveformProperty = DependencyProperty.Register(nameof(Waveform), typeof(SignalGeneratorType), typeof(WaveformSelectorControl), new FrameworkPropertyMetadata(SignalGeneratorType.Sin, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, (d, e) => Console.WriteLine("Wave changed")));
 
+        public string GroupName;
         public SignalGeneratorType Waveform
         {
             get => (SignalGeneratorType)GetValue(WaveformProperty);
             set => SetValue(WaveformProperty, value);
         }
 
+
         public WaveformSelectorControl()
         {
             InitializeComponent();
+            _elementCounter++;
+            GroupName = "Osc" + _elementCounter;
         }
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)

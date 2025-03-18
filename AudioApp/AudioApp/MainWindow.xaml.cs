@@ -18,6 +18,7 @@ namespace AudioApp
             audioEngine = AudioEngine.GetInstance();
             audioEngine.AddOscillator(OscOnePanel.Oscillator);
             audioEngine.AddOscillator(OscTwoPanel.Oscillator);
+            audioEngine.AddVolumeEnvelope(VolumeEnvelopePanel.VolumeEnvelope);
             audioEngine.Play();
 
         }
