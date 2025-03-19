@@ -44,7 +44,7 @@
             <controls:KnobControl x:Name="GainControl"   Value="{Binding Gain, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  Width="100" Height="100" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Gain"></controls:KnobControl> <!--gain-->
             <controls:KnobControl x:Name="ShapeControl" Value="{Binding Shape, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" Height="100" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Shape"></controls:KnobControl> <!--detune-->
             <controls:KnobControl x:Name="DetuneControl" Value="{Binding Detune, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="100" Height="100" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Detune"></controls:KnobControl>
-            <controls:KnobControl x:Name="OctaveControl" Width="100" Height="100" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" LabelText="Octave"></controls:KnobControl>
+            <controls:OctaveSelectorControl Grid.Column="1" Grid.Row="1" Octave="{Binding Octave, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></controls:OctaveSelectorControl>
 
             <controls:WaveformSelectorControl Waveform="{Binding Waveform, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.RowSpan="2" Width="35" HorizontalAlignment="Left"></controls:WaveformSelectorControl>
 

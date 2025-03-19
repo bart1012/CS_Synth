@@ -39,7 +39,7 @@ namespace AudioApp.Models
                 { Key.K,  261.63 }   // C4
             };
             effectsProcessor = new(_mixer);
-            //effectsProcessor.AddEffect(new AmplitudeModulation(2.0, 0.5));
+            effectsProcessor.AddEffect(new AmplitudeModulation(2.0, 0.5));
             _wasapiOut.Init(effectsProcessor);
         }
 
