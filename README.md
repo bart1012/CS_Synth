@@ -1,6 +1,7 @@
 # Bart's Super Cool Synth
 
 A small personal project built using NAudio and WPF.
+![Image](https://github.com/user-attachments/assets/3eb1097c-3282-4b0b-aa51-2c54a66cf464)
 
 ## Current Updates
 
