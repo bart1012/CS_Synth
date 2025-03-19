@@ -18,12 +18,14 @@ namespace AudioApp
             audioEngine = AudioEngine.GetInstance();
             audioEngine.AddOscillator(OscOnePanel.Oscillator);
             audioEngine.AddOscillator(OscTwoPanel.Oscillator);
+            audioEngine.AddVolumeEnvelope(VolumeEnvelopePanel.VolumeEnvelope);
             audioEngine.Play();
 
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            //prevent continous firing of key-down event
             if (!keysHeld.Contains(e.Key))
             {
                 audioEngine.NoteDown(e.Key);

@@ -12,13 +12,14 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
                         <Border Background="{TemplateBinding Background}"
-                            BorderBrush="Black" 
-                            BorderThickness="2" 
+                            BorderBrush="Gray" 
+                            BorderThickness="1" 
                             CornerRadius="100" Margin="1">
                    
                             <ContentPresenter HorizontalAlignment="Center" 
-                                          VerticalAlignment="Center"/>
+                                          VerticalAlignment="Center" TextElement.FontSize="9" TextElement.Foreground="Gray"/>
                         </Border>
+                 
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter Property="Background" Value="Orange"/>
@@ -35,10 +36,10 @@
     <Viewbox Stretch="Uniform">
         <Grid Background="GhostWhite">
             <StackPanel Orientation="Vertical"  Grid.Column="2" Grid.Row="0">
-                <RadioButton Content="Si"  Width="25" Height="25" GroupName="Options" IsChecked="True" Checked="RadioButton_Checked"/>
-                <RadioButton Content="Sq" Width="25" Height="25" GroupName="Options" Checked="RadioButton_Checked"/>
-                <RadioButton Content="Tr" Width="25" Height="25" GroupName="Options" Checked="RadioButton_Checked"/>
-                <RadioButton Content="Sa" Width="25" Height="25" GroupName="Options" Checked="RadioButton_Checked"/>
+                <RadioButton Content="Si" Width="20" Height="20" GroupName="{Binding GroupName, RelativeSource={RelativeSource AncestorType=UserControl}}" IsChecked="True" Checked="RadioButton_Checked"/>
+                <RadioButton Content="Sq" Width="20" Height="20" GroupName="{Binding GroupName, RelativeSource={RelativeSource AncestorType=UserControl}}" Checked="RadioButton_Checked"/>
+                <RadioButton Content="Tr" Width="20" Height="20" GroupName="{Binding GroupName, RelativeSource={RelativeSource AncestorType=UserControl}}" Checked="RadioButton_Checked"/>
+                <RadioButton Content="Sa" Width="20" Height="20" GroupName="{Binding GroupName, RelativeSource={RelativeSource AncestorType=UserControl}}" Checked="RadioButton_Checked"/>
             </StackPanel>
         </Grid>
     </Viewbox>
