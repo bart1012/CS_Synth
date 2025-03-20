@@ -21,6 +21,7 @@ namespace AudioApp
             audioEngine.AddVolumeEnvelope(VolumeEnvelopePanel.VolumeEnvelope);
             audioEngine.Play();
 
+
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)

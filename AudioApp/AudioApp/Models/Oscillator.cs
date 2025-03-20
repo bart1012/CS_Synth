@@ -1,91 +1,112 @@
-﻿using NAudio.Wave.SampleProviders;
-using System.Windows;
+﻿using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 
 namespace AudioApp.Models
 {
-    public class Oscillator : DependencyObject
+    public class Oscillator : ISampleProvider, IAudioNode
     {
+        private readonly WaveFormat _waveFormat;
+        private int _nSample;
 
-        public static readonly DependencyProperty GainProperty =
-            DependencyProperty.Register(nameof(Gain), typeof(double), typeof(Oscillator),
-                new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnGainChanged));
+        public SignalGeneratorType Type { get; set; }
+        public double Frequency { get; set; }
+        public double Gain { get; set; }
+        public double Detune { get; set; } = 0.0;
+        public double Shape { get; set; } = 0.0;
+        public double PulseWidth { get; set; } = 0.5;
+        public int Unison { get; set; } = 1;
+        public double UnisonSpread { get; set; } = 0.02;
 
-        public double Gain
+
+
+        public WaveFormat WaveFormat => _waveFormat;
+
+        public Oscillator(WaveFormat format)
         {
-            get => (double)GetValue(GainProperty);
-            set => SetValue(GainProperty, value);
+            _waveFormat = format;
         }
 
-        public static readonly DependencyProperty WaveformProperty =
-            DependencyProperty.Register(nameof(Waveform), typeof(SignalGeneratorType), typeof(Oscillator),
-                new FrameworkPropertyMetadata(SignalGeneratorType.Sin, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnWaveformChanged));
-
-        public SignalGeneratorType Waveform
+        public void Connect()
         {
-            get => (SignalGeneratorType)GetValue(WaveformProperty);
-            set => SetValue(WaveformProperty, value);
+            throw new NotImplementedException();
         }
 
-        public static readonly DependencyProperty OctaveProperty =
-              DependencyProperty.Register(nameof(Octave), typeof(int), typeof(Oscillator),
-                  new FrameworkPropertyMetadata(1, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnOctaveChanged));
-
-        public int Octave
+        public void Disconnect()
         {
-            get => (int)GetValue(OctaveProperty);
-            set => SetValue(OctaveProperty, value);
+            throw new NotImplementedException();
         }
 
-
-        public static readonly DependencyProperty ShapeProperty =
-              DependencyProperty.Register(nameof(Shape), typeof(double), typeof(Oscillator),
-                  new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnShapeChanged));
-
-        public double Shape
+        public void Reset()
         {
-            get => (double)GetValue(ShapeProperty);
-            set => SetValue(ShapeProperty, value);
+            _nSample = 0;
         }
 
-
-        public static readonly DependencyProperty DetuneProperty =
-              DependencyProperty.Register(nameof(Detune), typeof(double), typeof(Oscillator),
-                  new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnDetuneChanged));
-
-        public double Detune
+        public int Read(float[] buffer, int offset, int count)
         {
-            get => (double)GetValue(DetuneProperty);
-            set => SetValue(DetuneProperty, value);
+            int startPosition = offset;
+
+            for (int i = 0; i < count / _waveFormat.Channels; i++)
+            {
+                double nSampleValue;
+
+                switch (Type)
+                {
+                    case SignalGeneratorType.Sin:
+                        {
+                            double angularFreq = Math.PI * 2.0 * Frequency / (double)_waveFormat.SampleRate;
+                            nSampleValue = Gain * Math.Sin((double)_nSample * angularFreq);
+                            _nSample++;
+                            break;
+                        }
+                    case SignalGeneratorType.Square:
+                        {
+                            double angularFreq = 2.0 * Frequency / (double)_waveFormat.SampleRate;
+                            double normalizedPhase = (double)_nSample * angularFreq % 2.0 - 1.0;
+                            nSampleValue = ((normalizedPhase >= 0.0) ? Gain : (0.0 - Gain));
+                            _nSample++;
+                            break;
+                        }
+                    case SignalGeneratorType.Triangle:
+                        {
+                            double angularFreq = 2.0 * Frequency / (double)_waveFormat.SampleRate;
+                            double normalizedPhase = (double)_nSample * angularFreq % 2.0;
+                            nSampleValue = 2.0 * normalizedPhase;
+                            if (nSampleValue > 1.0)
+                            {
+                                nSampleValue = 2.0 - nSampleValue;
+                            }
+
+                            if (nSampleValue < -1.0)
+                            {
+                                nSampleValue = -2.0 - nSampleValue;
+                            }
+
+                            nSampleValue *= Gain;
+                            _nSample++;
+                            break;
+                        }
+                    case SignalGeneratorType.SawTooth:
+                        {
+                            double angularFreq = 2.0 * Frequency / (double)_waveFormat.SampleRate;
+                            double normalizedPhase = (double)_nSample * angularFreq % 2.0 - 1.0;
+                            nSampleValue = Gain * normalizedPhase;
+                            _nSample++;
+                            break;
+                        }
+
+                    default:
+                        nSampleValue = 0.0;
+                        break;
+                }
+
+                for (int j = 0; j < _waveFormat.Channels; j++)
+                {
+
+                    buffer[startPosition++] = (float)nSampleValue;
+
+                }
+            }
+            return count;
         }
-
-
-
-
-        private static void OnGainChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
-        private static void OnWaveformChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
-        private static void OnOctaveChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
-        private static void OnShapeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
-        private static void OnDetuneChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-
-        }
-
-
     }
 }

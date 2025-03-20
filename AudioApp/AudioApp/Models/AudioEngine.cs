@@ -9,19 +9,18 @@ namespace AudioApp.Models
         private static AudioEngine? _instance;
         private WasapiOut _wasapiOut;
         private VolumeEnvelopeWrapper _volumeEnvelope;
-        private MixingSampleProvider _mixer;
+        private Mixer _mixer;
         private Dictionary<Key, double> _frequencyMappings;
-        private Oscillator[] _oscillators = new Oscillator[2];
+        private OscillatorUI[] _oscillators = new OscillatorUI[2];
         private Dictionary<Key, List<ADSREnvelopeProvider>> _activeNotes = new();
         private EffectsProcessor effectsProcessor;
 
         private AudioEngine()
         {
+
             _wasapiOut = new();
-            _mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2))
-            {
-                ReadFully = true
-            };
+            _mixer = new Mixer(WaveFormat.CreateIeeeFloatWaveFormat(44100, 2));
+
             _frequencyMappings = new Dictionary<Key, double>
             {
                 { Key.A,  130.81 },  // C3
@@ -38,9 +37,9 @@ namespace AudioApp.Models
                 { Key.J,  246.94 },  // B3
                 { Key.K,  261.63 }   // C4
             };
-            effectsProcessor = new(_mixer);
-            effectsProcessor.AddEffect(new AmplitudeModulation(2.0, 0.5));
-            _wasapiOut.Init(effectsProcessor);
+            //effectsProcessor = new(_mixer);
+            //effectsProcessor.AddEffect(new AmplitudeModulation(2.0, 0.5));
+            _wasapiOut.Init(_mixer);
         }
 
         public static AudioEngine GetInstance()
@@ -51,7 +50,7 @@ namespace AudioApp.Models
             }
             return _instance;
         }
-        private SignalGenerator GenerateBaseSignal(Key key, Oscillator osc)
+        private SignalGenerator GenerateBaseSignal(Key key, OscillatorUI osc)
         {
             return new SignalGenerator()
             {
@@ -107,7 +106,7 @@ namespace AudioApp.Models
         {
             _volumeEnvelope = env;
         }
-        public void AddOscillator(Oscillator osc)
+        public void AddOscillator(OscillatorUI osc)
         {
             if (_oscillators[0] != null && _oscillators[1] != null) throw new InvalidOperationException("You cannot add more than 2 oscillators.");
             if (_oscillators[0] is null) _oscillators[0] = osc;
